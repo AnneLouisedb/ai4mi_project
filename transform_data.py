@@ -1,5 +1,6 @@
 import SimpleITK as sitk
 import os
+import shutil
 
 def apply_transform_to_segmentation(input_seg_file, transform_file, output_file):
     """
@@ -31,13 +32,19 @@ def main():
     for patient_id in range(1, 41):  # Assuming 40 patients
         patient_folder = f'Patient_{patient_id:02d}'
         input_seg_file = os.path.join(base_folder, patient_folder, 'GT.nii.gz')
-        output_file = os.path.join(base_folder, patient_folder, 'transformed_segmentation.nii.gz')
+        output_file = os.path.join(base_folder, patient_folder, 'original_GT.nii.gz')
+
+        # store out
         
         # Check if the input segmentation file exists
         if os.path.isfile(input_seg_file):
             print(f'Processing {input_seg_file}...')
-            apply_transform_to_segmentation(input_seg_file, transform_file, output_file)
-            print(f'Saved transformed segmentation to {output_file}')
+            # save a copy of input_seg_file and store as  output_file
+
+            shutil.copy(input_seg_file, output_file)
+
+            apply_transform_to_segmentation(input_seg_file, transform_file, input_seg_file)
+            print(f'Saved transformed segmentation to {input_seg_file}')
         else:
             print(f'Skipping {input_seg_file} (file does not exist)')
 
