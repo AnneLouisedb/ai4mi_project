@@ -1,0 +1,37 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+/var/spool/slurm/slurmd/job7886251/slurm_script: line 15: cd: ai4mi_project: No such file or directory
+Namespace(data_folder=PosixPath('results/segthor/UNet/ce/best_epoch/val'), source_scan_pattern='data/segthor_train/train/{id_}/GT.nii.gz', dest_folder=PosixPath('volumes/segthor/UNet/ce'), grp_regex='(Patient_\\d\\d)_\\d\\d\\d\\d', num_classes=255)
+['Patient_39', 'Patient_21', 'Patient_28', 'Patient_01', 'Patient_35', 'Patient_22', 'Patient_30', 'Patient_02', 'Patient_16', 'Patient_13']
+Found 10 unique patients out of 1967 images ; regex: (Patient_\d\d)_\d\d\d\d
+  0%|          | 0/10 [?it/s] 10%|█         | 1/10 [ 7.15s/it] 20%|██        | 2/10 [ 5.89s/it] 30%|███       | 3/10 [ 5.75s/it] 40%|████      | 4/10 [ 6.30s/it] 50%|█████     | 5/10 [ 6.06s/it] 60%|██████    | 6/10 [ 5.91s/it] 70%|███████   | 7/10 [ 5.73s/it] 80%|████████  | 8/10 [ 6.32s/it] 90%|█████████ | 9/10 [ 5.97s/it]100%|██████████| 10/10 [ 6.30s/it]100%|██████████| 10/10 [ 6.13s/it]
+Namespace(metric_file=PosixPath('results/segthor/UNet/ce/dice_val.npy'), dest=PosixPath('results/segthor/UNet/ce/dice_val.png'), headless=False)
+python: can't open file '/gpfs/home3/scur1765/ai4mi_project/evaluation.py': [Errno 2] No such file or directory
+
+JOB STATISTICS
+==============
+Job ID: 7886251
+Cluster: snellius
+User/Group: scur1765/scur1765
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:23:24 core-walltime
+Job Wall-clock time: 00:01:18
+Memory Utilized: 0.00 MB (estimated maximum)
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics may be misleading for RUNNING jobs.
