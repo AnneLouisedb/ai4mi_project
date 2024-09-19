@@ -17,7 +17,8 @@ cd ai4mi_project
 source ai4mi/bin/activate
 # python -m pip install -r requirements.txt
 
-# python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/ce --gpu
+python transform_data.py
+python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/ce --gpu
 # python main.py --dataset TOY2 --mode full --epoch 25 --dest results/toy2/ce --gpu
 
 # python stitch.py --data_folder results/segthor/UNet/ce/best_epoch/val \
