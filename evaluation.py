@@ -39,6 +39,7 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
     """
     # Convert SimpleITK images to numpy arrays
     pred_np = sitk.GetArrayFromImage(pred)
+    pred_np = np.round(pred_np / 64).astype(int)
     target_np = sitk.GetArrayFromImage(target)
     
     # Assuming the images have 4 classes (background + 3 organs)
