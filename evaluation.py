@@ -64,8 +64,10 @@ def extract_files(base_folder: str, file_pattern: str, id_pattern: str) -> Dict[
 
 
 def evaluate_segmentation(ground_truth: sitk.Image, prediction: sitk.Image):
-    # Ensure both images have the same size and spacing
-    prediction = sitk.Resample(prediction, ground_truth)
+
+    assert np.count_nonzero(sitk.GetArrayFromImage(ground_truth)) > 0, f"Ground truth file is empty!"
+    assert np.count_nonzero(sitk.GetArrayFromImage(prediction)) > 0, f"Prediction file is empty!"
+    assert ground_truth.GetSpacing() == prediction.GetSpacing(), f"Spacing of corresponding image files don't match!"
 
     # Calculate Hausdorff distance using SimpleITK
     hausdorff_filter = sitk.HausdorffDistanceImageFilter()
@@ -75,16 +77,20 @@ def evaluate_segmentation(ground_truth: sitk.Image, prediction: sitk.Image):
 
     return hausdorff_dist, avg_hausdorff_dist
 
-def run(args):
-    base_folder: str = f'{args.dataset}/train'
-    
 
-    # base_folder: str = 'data/segthor_train/train'
+
+def run(args):
+    if args.dataset == 'SEGTHOR':
+        base_folder: str =  'data/segthor_train/train'
+    
+ 
     ground_truths: Dict[str, sitk.Image] = extract_files(base_folder, "Patient_*/GT.nii.gz", r"Patient_(\d+)")
+
     # prediction files
-    # base_folder: str = 'volumes/segthor/UNet/ce'
-    base_folder: str = f'{args.model}/ce'
-    predictions: Dict[str, sitk.Image] = extract_files(base_folder, "Patient_*.nii.gz", r"Patient_(\d+)")
+    if args.model == 'UNet':
+        base_folder2: str = f'volumes/segthor/UNet/ce'
+
+    predictions: Dict[str, sitk.Image] = extract_files(base_folder2, "Patient_*.nii.gz", r"Patient_(\d+)")
 
     results = {}
     
@@ -129,9 +135,9 @@ def get_args() -> argparse.Namespace:
                         help='Pattern for ground truth scans, e.g., "data/segthor_train/train/{id_}/GT.nii.gz"')
     parser.add_argument('--prediction_folder', type=str, required=True,
                         help='Path to the folder containing prediction files') 
-    parser.add_argument('--dataset', type=str, default='data/segthor_train/train', 
+    parser.add_argument('--dataset', type=str, default='SEGTHOR', 
                         help="Path to the SEGTHOR dataset folder. Default is 'data/segthor_train/train'.")
-    parser.add_argument('--model', type=str, default='volumes/segthor/UNet', 
+    parser.add_argument('--model', type=str, default='UNet', 
                         help="Path to the UNET model predictions folder. Default is 'volumes/segthor/UNet'.")
     
 
