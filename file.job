@@ -17,8 +17,8 @@ cd ai4mi_project
 source ai4mi/bin/activate
 # python -m pip install -r requirements.txt
 
-python transform_data.py
-python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/ce --gpu
+# python transform_data.py
+# python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/ce --gpu
 # python main.py --dataset TOY2 --mode full --epoch 25 --dest results/toy2/ce --gpu
 
 # python stitch.py --data_folder results/segthor/UNet/ce/best_epoch/val \
@@ -27,8 +27,8 @@ python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/U
 #     --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
 
 # # Evaluation
-# python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
+python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
 
-# python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
+python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
 
 # /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
