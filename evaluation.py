@@ -48,6 +48,7 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
     organ_names = ['Esophagus', 'Heart', 'Trachea', 'Aorta'] # 'Background', ??
     
     for c in range(num_classes):
+        # split on class
         pred_mask = (pred_np == c).astype(np.uint8)
         target_mask = (target_np == c).astype(np.uint8)
         
