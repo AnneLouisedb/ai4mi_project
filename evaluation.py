@@ -62,20 +62,7 @@ def extract_files(base_folder: str, file_pattern: str, id_pattern: str) -> Dict[
             results[patient_id] = sitk.ReadImage(str(file)) 
     return results
 
-# def extract_files(base_folder: str, file_pattern: str, id_pattern: str) -> Dict[str, sitk.Image]:
-#     base_path: Path = Path(base_folder).resolve()
-#     files: list[Path] = list(base_path.glob(file_pattern))
-    
-#     id_regex = re.compile(id_pattern)
-#     results: Dict[str, sitk.Image] = {}
-    
-#     for file in files:
-#         match = id_regex.search(str(file))
-#         if match:
-#             patient_id: str = match.group(1)
-#             results[patient_id] = sitk.ReadImage(str(file))
-    
-#     return results
+
 def evaluate_segmentation(ground_truth: sitk.Image, prediction: sitk.Image):
     # Ensure both images have the same size and spacing
     prediction = sitk.Resample(prediction, ground_truth)
@@ -89,10 +76,14 @@ def evaluate_segmentation(ground_truth: sitk.Image, prediction: sitk.Image):
     return hausdorff_dist, avg_hausdorff_dist
 
 def run(args):
-    base_folder: str = 'data/segthor_train/train'
+    base_folder: str = f'{args.dataset}/train'
+    
+
+    # base_folder: str = 'data/segthor_train/train'
     ground_truths: Dict[str, sitk.Image] = extract_files(base_folder, "Patient_*/GT.nii.gz", r"Patient_(\d+)")
     # prediction files
-    base_folder: str = 'volumes/segthor/UNet/ce'
+    # base_folder: str = 'volumes/segthor/UNet/ce'
+    base_folder: str = f'{args.model}/ce'
     predictions: Dict[str, sitk.Image] = extract_files(base_folder, "Patient_*.nii.gz", r"Patient_(\d+)")
 
     results = {}
@@ -132,13 +123,21 @@ def plot_results(results: Dict[str, Dict[str, float]], save_path: Path):
 
 
 
-
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Plot Hausdorff distance per image')
     parser.add_argument('--source_scan_pattern', type=str, required=True,
                         help='Pattern for ground truth scans, e.g., "data/segthor_train/train/{id_}/GT.nii.gz"')
     parser.add_argument('--prediction_folder', type=str, required=True,
                         help='Path to the folder containing prediction files') 
+    parser.add_argument('--dataset', type=str, default='data/segthor_train/train', 
+                        help="Path to the SEGTHOR dataset folder. Default is 'data/segthor_train/train'.")
+    parser.add_argument('--model', type=str, default='volumes/segthor/UNet', 
+                        help="Path to the UNET model predictions folder. Default is 'volumes/segthor/UNet'.")
+    
+
+
+    # python script.py --dataset data/segthor_train --model volumes/segthor/UNet
+    
     return parser.parse_args()
 
 if __name__ == "__main__":
