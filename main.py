@@ -273,8 +273,8 @@ def main():
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
     parser.add_argument('--model', default='enet', help="Which model to use? [enet, unet, nnunet]" )
-    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'],
-                        required=True, help="Filter to apply for preprocessing.")
+    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], required=True,
+                        help="Filter to apply for preprocessing.")
     
     args = parser.parse_args()
 
