@@ -54,6 +54,9 @@ from losses import (CrossEntropy)
 from UNet.unet_model import UNet
 from nnUnet.nnUnet import nnUNet
 
+# Import denoising filters
+from preprocessing import apply_gaussian_filter, apply_median_filter, apply_non_local_means_denoising, apply_bilateral_filtering, apply_wavelet_transform_denoising
+
 datasets_params: dict[str, dict[str, Any]] = {}
 
 def initialize_datasets_params(model_name: str) -> None:
@@ -89,9 +92,24 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     B: int = datasets_params[args.dataset]['B']
     root_dir = Path("data") / args.dataset
 
+    # Choose the filter based on the command-line argument (or add custom logic)
+    if args.filter == 'gaussian':
+        filter_func = lambda nd: apply_gaussian_filter(nd, sigma=1)
+    elif args.filter == 'median':
+        filter_func = lambda nd: apply_median_filter(nd, size=3)
+    elif args.filter == 'non_local_means':
+        filter_func = lambda nd: apply_non_local_means_denoising(nd, h=10)
+    elif args.filter == 'bilateral':
+        filter_func = lambda nd: apply_bilateral_filtering(nd, d=9, sigmaColor=75, sigmaSpace=75)
+    elif args.filter == 'wavelet':
+        filter_func = lambda nd: apply_wavelet_transform_denoising(nd, wavelet='db1')
+    else:
+        raise ValueError(f"Unknown filter: {args.filter}")
+
     img_transform = transforms.Compose([
         lambda img: img.convert('L'),
         lambda img: np.array(img)[np.newaxis, ...],
+        filter_func, # Selected filter function for preprocessing
         lambda nd: nd / 255,  # max <= 1
         lambda nd: torch.tensor(nd, dtype=torch.float32)
     ])
@@ -255,6 +273,9 @@ def main():
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
     parser.add_argument('--model', default='enet', help="Which model to use? [enet, unet, nnunet]" )
+    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'],
+                        required=True, help="Filter to apply for preprocessing.")
+    
     args = parser.parse_args()
 
     pprint(args)
