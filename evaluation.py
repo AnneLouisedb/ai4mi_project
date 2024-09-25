@@ -120,8 +120,12 @@ def plot_results(results, args):
     ax2.set_yscale('log')  # Log scale for better visualization
 
     plt.tight_layout()
-    
-    save_path = Path('results/segthor') / Path(args.model) / "HD_per_organ.png"
+
+    if args.filter:
+        bf = f"{args.model}_{args.filter}"
+        save_path = Path('results/segthor') / Path(bf) / "HD_per_organ.png"
+    else:
+        save_path = Path('results/segthor') / Path(args.model) / "HD_per_organ.png"
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close('all')  # Close all figures to free up memory
 
@@ -136,17 +140,28 @@ def run(args):
         base_folder, "Patient_*/GT.nii.gz", r"Patient_(\d+)"
     )
 
-    # prediction files
-    if args.model == "UNet":
-        base_folder2: str = f"volumes/segthor/UNet/ce"
+    if args.filter is not None:
+            if args.model == "UNet":
+                base_folder2: str = f"volumes/segthor/UNet_{args.filter}/ce"
 
-    elif args.model == "nnUNet":
-        base_folder2: str = f"volumes/segthor/nnUNet/ce"
+            elif args.model == "nnUNet":
+                base_folder2: str = f"volumes/segthor/nnUNet_{args.filter}/ce"
 
-    elif args.model == "ENet":
-        base_folder2: str = f"volumes/segthor/ENet/ce"
+            elif args.model == "ENet":
+                base_folder2: str = f"volumes/segthor/ENet_{args.filter}/ce"
+            else:
+                raise ValueError(f"Unsupported model: {args.model}")
     else:
-        raise ValueError(f"Unsupported model: {args.model}")
+            if args.model == "UNet":
+                base_folder2: str = f"volumes/segthor/UNet/ce"
+
+            elif args.model == "nnUNet":
+                base_folder2: str = f"volumes/segthor/nnUNet/ce"
+
+            elif args.model == "ENet":
+                base_folder2: str = f"volumes/segthor/ENet/ce"
+            else:
+                raise ValueError(f"Unsupported model: {args.model}")
 
     predictions: Dict[str, sitk.Image] = extract_files(
         base_folder2, "Patient_*.nii.gz", r"Patient_(\d+)"
@@ -204,6 +219,8 @@ def get_args() -> argparse.Namespace:
         default="UNet",
         help="Path to the UNet model predictions folder. Default is 'volumes/segthor/UNet'.",
     )
+    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], default = None,
+                        help="Filter to apply for preprocessing.")
 
     # python script.py --dataset data/segthor_train --model volumes/segthor/UNet
 

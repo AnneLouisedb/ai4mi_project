@@ -63,12 +63,12 @@ def initialize_datasets_params(model_name: str) -> None:
     """
     Initialize datasets_params based on the provided model name.
     """
-    if model_name == 'unet':
+    if model_name == 'UNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
-    elif model_name == 'nnunet':
+    elif model_name == 'nnUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
 
-    elif model_name == 'enet'
+    elif model_name == 'ENet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
     else:
         raise ValueError(f"Unsupported model: {model_name}. Please choose from ['unet', 'nnunet', 'enet'].")
@@ -276,8 +276,8 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='enet', help="Which model to use? [enet, unet, nnunet]" )
-    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], required=True,
+    parser.add_argument('--model', default='ENet', help="Which model to use? [ENet, UNet, nnUNet]" )
+    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], default = 'gaussian',
                         help="Filter to apply for preprocessing.")
     
     args = parser.parse_args()
