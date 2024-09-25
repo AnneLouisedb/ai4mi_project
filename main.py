@@ -50,7 +50,7 @@ from utils import (Dcm,
 
 from losses import (CrossEntropy)
 
-# import Unet
+# import Unet and nnUnet
 from UNet.unet_model import UNet
 from nnUnet.nnUnet import nnUNet
 
