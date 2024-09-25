@@ -138,6 +138,10 @@ def run(args):
     # prediction files
     if args.model == "UNet":
         base_folder2: str = f"volumes/segthor/UNet/ce"
+    elif args.model == "nnUNet":
+        base_folder2: str = f"volumes/segthor/nnUNet/ce"
+    else:
+        raise ValueError(f"Unsupported model: {args.model}")
 
     predictions: Dict[str, sitk.Image] = extract_files(
         base_folder2, "Patient_*.nii.gz", r"Patient_(\d+)"
