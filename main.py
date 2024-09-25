@@ -67,8 +67,12 @@ def initialize_datasets_params(model_name: str) -> None:
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
     elif model_name == 'nnunet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
-    else:  # Assuming 'enet' or other models
+
+    elif model_name == 'enet'
         datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
+    else:
+        raise ValueError(f"Unsupported model: {model_name}. Please choose from ['unet', 'nnunet', 'enet'].")
+
     
     # Add more datasets if needed
     datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2}

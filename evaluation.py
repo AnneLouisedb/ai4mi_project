@@ -47,7 +47,7 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
     hausdorff_distances = np.zeros((num_classes, 2)) # first is the normal, second is the average
     
     organ_names = ['Background', 'Esophagus', 'Heart', 'Trachea', 'Aorta'] 
-    
+   
     for c in range(num_classes):
         # split on class
         pred_mask = (pred_np == c).astype(np.uint8)
@@ -96,6 +96,7 @@ def plot_results(results, args):
     
     # Set up organ names
     organ_names = ['Background', 'Esophagus', 'Heart', 'Trachea', 'Aorta'] # DOUBLE CHECK THIS 
+    colors = ['black', 'green', 'yellow', 'red', 'blue']
 
     assert num_organs == len(organ_names), f"Number of organs in results ({num_organs}) doesn't match the number of organ names ({len(organ_names)})"
     
@@ -107,13 +108,13 @@ def plot_results(results, args):
     # plot the HD average distance
 
     # Plot Hausdorff Distance for all organs
-    ax1.bar(organ_names, results[:, 0])
+    ax1.bar(organ_names, results[:, 0], color=colors)
     ax1.set_title("Hausdorff Distance")
     ax1.set_ylabel("Distance")
     ax1.set_yscale('log')  # Log scale for better visualization
 
     # Plot Average Hausdorff Distance for all organs
-    ax2.bar(organ_names, results[:, 1])
+    ax2.bar(organ_names, results[:, 1], color=colors)
     ax2.set_title("Average Hausdorff Distance")
     ax2.set_ylabel("Distance")
     ax2.set_yscale('log')  # Log scale for better visualization
@@ -138,8 +139,12 @@ def run(args):
     # prediction files
     if args.model == "UNet":
         base_folder2: str = f"volumes/segthor/UNet/ce"
+
     elif args.model == "nnUNet":
         base_folder2: str = f"volumes/segthor/nnUNet/ce"
+
+    elif args.model == "ENet":
+        base_folder2: str = f"volumes/segthor/ENet/ce"
     else:
         raise ValueError(f"Unsupported model: {args.model}")
 
