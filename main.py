@@ -52,17 +52,27 @@ from losses import (CrossEntropy)
 
 # import Unet
 from UNet.unet_model import UNet
+from nnUnet.nnUnet import nnUNet
 
 datasets_params: dict[str, dict[str, Any]] = {}
-# K for the number of classes
-# Avoids the clases with C (often used for the number of Channel)
-datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2}
-# datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
-datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
 
+def initialize_datasets_params(model_name: str) -> None:
+    """
+    Initialize datasets_params based on the provided model name.
+    """
+    if model_name == 'unet':
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
+    elif model_name == 'nnunet':
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
+    else:  # Assuming 'enet' or other models
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
+    
+    # Add more datasets if needed
+    datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2}
 
 def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     # Networks and scheduler
+    initialize_datasets_params(args.model)
     gpu: bool = args.gpu and torch.cuda.is_available()
     device = torch.device("cuda") if gpu else torch.device("cpu")
     print(f">> Picked {device} to run experiments")
@@ -234,7 +244,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--epochs', default=200, type=int)
-    parser.add_argument('--dataset', default='TOY2', choices=datasets_params.keys())
+    parser.add_argument('--dataset', choices=['SEGTHOR', 'TOY2'], required=True, help='Dataset name')
     parser.add_argument('--mode', default='full', choices=['partial', 'full'])
     parser.add_argument('--dest', type=Path, required=True,
                         help="Destination directory to save the results (predictions and weights).")
@@ -244,7 +254,7 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-
+    parser.add_argument('--model', default='enet', help="Which model to use? [enet, unet, nnunet]" )
     args = parser.parse_args()
 
     pprint(args)
