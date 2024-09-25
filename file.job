@@ -26,9 +26,20 @@ source ai4mi/bin/activate
 #     --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" \
 #     --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
 
+# Train nnUNet model on SEGTHOR dataset
+python main.py \
+    --dataset SEGTHOR \  
+    --mode full \        
+    --epochs 25 \        
+    --model nnUNet \     
+    --dest results/segthor/nnUNet \  
+    --gpu \              
+    --num_workers 8      
+
 # # Evaluation
-python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
+# python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
+python plot.py --metric_file results/segthor/nnUNet/ce/dice_val.npy --dest results/segthor/nnUNet/ce/dice_val.png
 
-python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
-
+#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
+python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet"
 # /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
