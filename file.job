@@ -36,4 +36,18 @@ python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/tra
 
 #python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
 
+<<<<<<< Updated upstream
 # /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
+=======
+# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
+
+# run the training script for nnUnet
+#python stitch.py --data_folder results/segthor/nnUNet/ce/best_epoch/val --dest_folder volumes/segthor/nnUNet/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+
+#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce" --model nnUNet
+
+# run the training script for Enet
+python stitch.py --data_folder results/segthor/nnUNet/ce/best_epoch/val --dest_folder volumes/segthor/ENet/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+
+python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce" --model ENet
+>>>>>>> Stashed changes
