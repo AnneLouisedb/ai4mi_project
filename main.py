@@ -33,7 +33,7 @@ from shutil import copytree, rmtree
 import torch
 import numpy as np
 import torch.nn.functional as F
-from torch import nn, Tensor
+from torch import nn, Tensor 
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
@@ -160,12 +160,12 @@ def runTraining(args):
     net, optimizer, device, train_loader, val_loader, K = setup(args)
 
     if args.loss == 'CE':
-    if args.mode == "full":
-        loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
-    elif args.mode in ["partial"] and args.dataset in ['SEGTHOR', 'SEGTHOR_STUDENTS']:
-        loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
-    else:
-        raise ValueError(args.mode, args.dataset)
+        if args.mode == "full":
+            loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
+        elif args.mode in ["partial"] and args.dataset in ['SEGTHOR', 'SEGTHOR_STUDENTS']:
+            loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
+        else:
+            raise ValueError(args.mode, args.dataset)
 
     elif args.loss == 'Dice':
         loss_fn = DiceLoss(idk=list(range(K)))

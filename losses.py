@@ -23,7 +23,8 @@
 # SOFTWARE.
 
 
-from torch import einsum
+import torch
+from torch import Tensor, einsum
 
 from utils import simplex, sset
 

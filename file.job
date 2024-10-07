@@ -2,7 +2,7 @@
 
 #SBATCH --partition=gpu
 #SBATCH --gpus=1
-#SBATCH --job-name=requirement
+#SBATCH --job-name=ENEt
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=03:00:00
@@ -18,22 +18,30 @@ source ai4mi/bin/activate
 # python -m pip install -r requirements.txt
 
 # python transform_data.py
-# python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/ce --gpu --model unet
+python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/dice_loss/ce --gpu --model 'UNet' --loss Dice
+python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/diceCE_loss/ce --gpu --model 'UNet' --loss DiceCE
+
 # python main.py --dataset TOY2 --mode full --epoch 25 --dest results/toy2/ce --gpu 
 
-# python stitch.py --data_folder results/segthor/UNet/ce/best_epoch/val \
-#     --dest_folder volumes/segthor/UNet/ce \
-#     --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" \
-#     --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+# python stitch.py --data_folder results/segthor/ENet/ce/best_epoch/val \
+#      --dest_folder volumes/segthor/ENet/ce \
+#      --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" \
+#      --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
 
 # # Evaluation
+# Enet
+
+#python plot.py --metric_file results/segthor/ENet/ce/dice_val.npy --dest results/segthor/ENet/ce/dice_val.png
+#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/ENet/ce" --model 'ENet' 
+
 # UNet
 #python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
-# nnUNet
-python plot.py --metric_file results/segthor/nnUNet/ce/dice_val.npy --dest results/segthor/nnUNet/ce/dice_val.png
 
-python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce"
+# nnUNet
+#vpython plot.py --metric_file results/segthor/nnUNet/ce/dice_val.npy --dest results/segthor/nnUNet/ce/dice_val.png -- model nnunet
+
+#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce"
 
 #python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
 
-# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
+# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gzS
