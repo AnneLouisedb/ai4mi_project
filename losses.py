@@ -51,3 +51,47 @@ class CrossEntropy():
 class PartialCrossEntropy(CrossEntropy):
     def __init__(self, **kwargs):
         super().__init__(idk=[1], **kwargs)
+
+
+
+class GeneralizedDice():
+    def __init__(self, **kwargs):
+        self.idk: List[int] = kwargs["idk"]
+        print(f"Initialized {self.__class__.__name__} with {kwargs}")
+
+    def __call__(self, probs: Tensor, target: Tensor) -> Tensor:
+        assert simplex(probs) and simplex(target)
+
+        pc = probs[:, self.idk, ...].type(torch.float32)
+        tc = target[:, self.idk, ...].type(torch.float32)
+
+        w: Tensor = 1 / ((einsum("bkwh->bk", tc).type(torch.float32) + 1e-10) ** 2)
+        intersection: Tensor = w * einsum("bkwh,bkwh->bk", pc, tc)
+        union: Tensor = w * (einsum("bkwh->bk", pc) + einsum("bkwh->bk", tc))
+
+        divided: Tensor = 1 - 2 * (einsum("bk->b", intersection) + 1e-10) / (einsum("bk->b", union) + 1e-10)
+
+        loss = divided.mean()
+
+        return loss
+
+
+class DiceLoss():
+    def __init__(self, **kwargs):
+        self.idk: List[int] = kwargs["idk"]
+        print(f"Initialized {self.__class__.__name__} with {kwargs}")
+
+    def __call__(self, probs: Tensor, target: Tensor) -> Tensor:
+        assert simplex(probs) and simplex(target)
+
+        pc = probs[:, self.idk, ...].type(torch.float32)
+        tc = target[:, self.idk, ...].type(torch.float32)
+
+        intersection: Tensor = einsum("bcwh,bcwh->bc", pc, tc)
+        union: Tensor = (einsum("bkwh->bk", pc) + einsum("bkwh->bk", tc))
+
+        divided: Tensor = torch.ones_like(intersection) - (2 * intersection + 1e-10) / (union + 1e-10)
+
+        loss = divided.mean()
+
+        return loss
