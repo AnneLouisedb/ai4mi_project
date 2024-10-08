@@ -28,7 +28,7 @@ def extract_files(
 
 def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray:
     """
-    Calculate Hausdorff distance for predictions and targets using SimpleITK.
+    Calculate the 95th percentile Hausdorff distance for predictions and targets using SimpleITK.
     
     Args:
     pred (sitk.Image): Predicted segmentation mask
@@ -65,20 +65,27 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
             assert target_sitk.GetSpacing() == pred_sitk.GetSpacing(), f"Spacing of corresponding image files don't match for class {c}!"
             
             hausdorff_filter = sitk.HausdorffDistanceImageFilter()
-            hausdorff_filter.Execute(pred_sitk, target_sitk)
+            hausdorff_filter.Execute(target_sitk, pred_sitk)
             
+            # Calculate the Hausdorff distance
             hausdorff_dist = hausdorff_filter.GetHausdorffDistance()
-            avg_hausdorff_dist = hausdorff_filter.GetAverageHausdorffDistance()
-            
             hausdorff_distances[c, 0] = hausdorff_dist
-            hausdorff_distances[c, 1] = avg_hausdorff_dist
-        else:
-            hausdorff_distances[c, 0] = float('inf')
-            hausdorff_distances[c, 1] = float('inf')
-        
+           
+            # Get all distances for computing the 95th percentile
+            y_true_contour = sitk.LabelContour(target_sitk, False)
+            y_pred_contour = sitk.LabelContour(pred_sitk, False)
+            y_true_distance_map = sitk.Abs(sitk.SignedMaurerDistanceMap(y_true_contour, squaredDistance=False, useImageSpacing=True))
+            y_pred_distance_map = sitk.Abs(sitk.SignedMaurerDistanceMap(y_pred_contour, squaredDistance=False, useImageSpacing=True))
+            
+            dist_y_pred = sitk.GetArrayViewFromImage(y_pred_distance_map)[sitk.GetArrayViewFromImage(y_true_distance_map)==0] 
+            dist_y_true = sitk.GetArrayViewFromImage(y_true_distance_map)[sitk.GetArrayViewFromImage(y_pred_distance_map)==0]
+            
+            hausdorff_distances[c, 1] = (np.percentile(dist_y_true, 95) + np.percentile(dist_y_pred, 95)) / 2.0
+
+            
         print(f"{organ_names[c]}:")
+        print(f"  95th Percentile Hausdorff Distance: {hausdorff_distances[c, 1]:.4f}")
         print(f"  Hausdorff Distance: {hausdorff_distances[c, 0]:.4f}")
-        print(f"  Average Hausdorff Distance: {hausdorff_distances[c, 1]:.4f}")
     
     return hausdorff_distances
 
@@ -115,7 +122,7 @@ def plot_results(results, args):
 
     # Plot Average Hausdorff Distance for all organs
     ax2.bar(organ_names, results[:, 1], color=colors)
-    ax2.set_title("Average Hausdorff Distance")
+    ax2.set_title("95th percentile Hausdorff Distance")
     ax2.set_ylabel("Distance")
     ax2.set_yscale('log')  # Log scale for better visualization
 
@@ -123,9 +130,9 @@ def plot_results(results, args):
 
     if args.filter:
         bf = f"{args.model}_{args.filter}"
-        save_path = Path('results/segthor') / Path(bf) / "HD_per_organ.png"
+        save_path = Path('results/segthor') / Path(bf) / "HD95_per_organ.png"
     else:
-        save_path = Path('results/segthor') / Path(args.model) / "HD_per_organ.png"
+        save_path = Path('results/segthor') / Path(args.model) / "HD95_per_organ.png"
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close('all')  # Close all figures to free up memory
 
@@ -160,6 +167,7 @@ def run(args):
 
             elif args.model == "ENet":
                 base_folder2: str = f"volumes/segthor/ENet/ce"
+
             else:
                 raise ValueError(f"Unsupported model: {args.model}")
 

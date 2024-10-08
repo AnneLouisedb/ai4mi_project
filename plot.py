@@ -27,7 +27,7 @@ from pathlib import Path
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pandas as pd
 
 def run(args: argparse.Namespace) -> None:
     metrics: np.ndarray = np.load(args.metric_file)
@@ -38,6 +38,22 @@ def run(args: argparse.Namespace) -> None:
         case 3:
             E, N, K = metrics.shape
 
+    # Prepare to calculate Dice scores per class
+    dice_scores = np.zeros((E, K - 1))
+
+    for k in range(1, K):
+        dice_scores[:, k - 1] = metrics[:, :, k].mean(axis=1)
+
+    # Create a DataFrame to store the results
+    class_labels = [f'Class {k}' for k in range(1, K)]
+    dice_df = pd.DataFrame(dice_scores, columns=class_labels)
+
+    # Save Dice scores to a CSV file
+    dice_df.to_csv('dice_scores.csv', index=False)
+    print(f"Dice scores saved to")
+
+
+    # plotting
     fig = plt.figure()
     ax = fig.gca()
     ax.set_title(str(args.metric_file))
