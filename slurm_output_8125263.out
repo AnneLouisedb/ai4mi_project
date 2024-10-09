@@ -1,0 +1,54 @@
+Lmod has detected the following error: These module(s) or extension(s) exist
+but cannot be loaded as requested: "Anaconda3/2022.05"
+   Try: "module spider Anaconda3/2022.05" to see how to load the module(s).
+
+
+
+/var/spool/slurm/slurmd/job8125263/slurm_script: line 15: cd: ai4mi_project: No such file or directory
+/var/spool/slurm/slurmd/job8125263/slurm_script: line 17: ai4mi/bin/activate: No such file or directory
+  File "/gpfs/home3/scur2486/ai4mi_project/main.py", line 207
+    match m:
+          ^
+SyntaxError: invalid syntax
+Namespace(data_folder=PosixPath('results/segthor/UNet_new/ce/best_epoch/val'), source_scan_pattern='data/segthor_train/train/{id_}/GT.nii.gz', dest_folder=PosixPath('volumes/segthor/UNet_new/ce'), grp_regex='(Patient_\\d\\d)_\\d\\d\\d\\d', num_classes=255)
+[]
+Traceback (most recent call last):
+  File "/gpfs/home3/scur2486/ai4mi_project/stitch.py", line 127, in <module>
+    main(get_args())
+  File "/gpfs/home3/scur2486/ai4mi_project/stitch.py", line 88, in main
+    assert len(unique_patients) < len(images)
+AssertionError
+  File "/gpfs/home3/scur2486/ai4mi_project/plot.py", line 34
+    match metrics.ndim:
+          ^
+SyntaxError: invalid syntax
+/home/scur2486/.local/lib/python3.9/site-packages/numpy/core/fromnumeric.py:3504: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+/home/scur2486/.local/lib/python3.9/site-packages/numpy/core/_methods.py:129: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+[]
+Average HD and Average HD over all patients (per class):
+nan
+Traceback (most recent call last):
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 239, in <module>
+    run(get_args())
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 201, in run
+    plot_results(average_results, args)
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 102, in plot_results
+    num_organs, num_metrics = results.shape # 4 by 2 - 4 organs, two metrics (2)
+ValueError: not enough values to unpack (expected 2, got 0)
+
+JOB STATISTICS
+==============
+Job ID: 8125263
+Cluster: snellius
+User/Group: scur2486/scur2486
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:06:00 core-walltime
+Job Wall-clock time: 00:00:20
+Memory Utilized: 0.00 MB (estimated maximum)
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics may be misleading for RUNNING jobs.

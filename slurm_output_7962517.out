@@ -1,0 +1,132 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+/var/spool/slurm/slurmd/job7962517/slurm_script: line 15: cd: ai4mi_project: No such file or directory
+/var/spool/slurm/slurmd/job7962517/slurm_script: line 17: /home/scur2486/ai4mi/bin/activate: No such file or directory
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: torch in /home/scur2486/.local/lib/python3.11/site-packages (from -r requirements.txt (line 1)) (2.4.1)
+Requirement already satisfied: numpy in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from -r requirements.txt (line 2)) (1.24.3)
+Requirement already satisfied: nibabel in /home/scur2486/.local/lib/python3.11/site-packages (from -r requirements.txt (line 3)) (5.2.1)
+Requirement already satisfied: torchvision in /home/scur2486/.local/lib/python3.11/site-packages (from -r requirements.txt (line 4)) (0.19.1)
+Requirement already satisfied: tqdm in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from -r requirements.txt (line 5)) (4.65.0)
+Requirement already satisfied: pillow in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from -r requirements.txt (line 6)) (9.4.0)
+Requirement already satisfied: scikit-image in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from -r requirements.txt (line 7)) (0.20.0)
+Requirement already satisfied: matplotlib in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from -r requirements.txt (line 8)) (3.7.1)
+Requirement already satisfied: filelock in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (3.9.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (4.12.2)
+Requirement already satisfied: sympy in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (1.11.1)
+Requirement already satisfied: networkx in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (3.1)
+Requirement already satisfied: jinja2 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (3.1.2)
+Requirement already satisfied: fsspec in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (2023.4.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (2.20.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (12.1.105)
+Requirement already satisfied: triton==3.0.0 in /home/scur2486/.local/lib/python3.11/site-packages (from torch->-r requirements.txt (line 1)) (3.0.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/scur2486/.local/lib/python3.11/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch->-r requirements.txt (line 1)) (12.6.68)
+Requirement already satisfied: packaging>=17 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from nibabel->-r requirements.txt (line 3)) (23.0)
+Requirement already satisfied: scipy>=1.8 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from scikit-image->-r requirements.txt (line 7)) (1.10.1)
+Requirement already satisfied: imageio>=2.4.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from scikit-image->-r requirements.txt (line 7)) (2.31.1)
+Requirement already satisfied: tifffile>=2019.7.26 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from scikit-image->-r requirements.txt (line 7)) (2021.7.2)
+Requirement already satisfied: PyWavelets>=1.1.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from scikit-image->-r requirements.txt (line 7)) (1.4.1)
+Requirement already satisfied: lazy_loader>=0.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from scikit-image->-r requirements.txt (line 7)) (0.2)
+Requirement already satisfied: contourpy>=1.0.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (1.0.5)
+Requirement already satisfied: cycler>=0.10 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (0.11.0)
+Requirement already satisfied: fonttools>=4.22.0 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (4.25.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (1.4.4)
+Requirement already satisfied: pyparsing>=2.3.1 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (3.0.9)
+Requirement already satisfied: python-dateutil>=2.7 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 8)) (2.8.2)
+Requirement already satisfied: six>=1.5 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from python-dateutil>=2.7->matplotlib->-r requirements.txt (line 8)) (1.16.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from jinja2->torch->-r requirements.txt (line 1)) (2.1.1)
+Requirement already satisfied: mpmath>=0.19 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from sympy->torch->-r requirements.txt (line 1)) (1.3.0)
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: torch in /home/scur2486/.local/lib/python3.11/site-packages (2.4.1)
+Requirement already satisfied: torchvision in /home/scur2486/.local/lib/python3.11/site-packages (0.19.1)
+Requirement already satisfied: nibabel in /home/scur2486/.local/lib/python3.11/site-packages (5.2.1)
+Requirement already satisfied: numpy in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (1.24.3)
+Requirement already satisfied: tqdm in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (4.65.0)
+Requirement already satisfied: filelock in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch) (3.9.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (4.12.2)
+Requirement already satisfied: sympy in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch) (1.11.1)
+Requirement already satisfied: networkx in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch) (3.1)
+Requirement already satisfied: jinja2 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch) (3.1.2)
+Requirement already satisfied: fsspec in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torch) (2023.4.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (2.20.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (12.1.105)
+Requirement already satisfied: triton==3.0.0 in /home/scur2486/.local/lib/python3.11/site-packages (from torch) (3.0.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/scur2486/.local/lib/python3.11/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch) (12.6.68)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from torchvision) (9.4.0)
+Requirement already satisfied: packaging>=17 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from nibabel) (23.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from jinja2->torch) (2.1.1)
+Requirement already satisfied: mpmath>=0.19 in /sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages (from sympy->torch) (1.3.0)
+Defaulting to user installation because normal site-packages is not writeable
+Collecting SimpleITK
+  Obtaining dependency information for SimpleITK from https://files.pythonhosted.org/packages/48/f8/3f00cc6d4f11b3cd934e3024c5be71ffc6d30d4620a16de7d194381f92f9/SimpleITK-2.4.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Downloading SimpleITK-2.4.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.9 kB)
+Downloading SimpleITK-2.4.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (52.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.3/52.3 MB 50.8 MB/s eta 0:00:00
+Installing collected packages: SimpleITK
+Successfully installed SimpleITK-2.4.0
+Namespace(metric_file=PosixPath('results/segthor/nnUNet/ce/dice_val.npy'), dest=PosixPath('results/segthor/nnUNet/ce/dice_val.png'), headless=False)
+Traceback (most recent call last):
+  File "/gpfs/home3/scur2486/ai4mi_project/plot.py", line 82, in <module>
+    run(get_args())
+  File "/gpfs/home3/scur2486/ai4mi_project/plot.py", line 33, in run
+    metrics: np.ndarray = np.load(args.metric_file)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/sw/arch/RHEL8/EB_production/2023/software/Anaconda3/2023.07-2/lib/python3.11/site-packages/numpy/lib/npyio.py", line 405, in load
+    fid = stack.enter_context(open(os_fspath(file), "rb"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'results/segthor/nnUNet/ce/dice_val.npy'
+[]
+Traceback (most recent call last):
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 222, in <module>
+    run(get_args())
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 186, in run
+    plot_results(all_results, args)
+  File "/gpfs/home3/scur2486/ai4mi_project/evaluation.py", line 95, in plot_results
+    num_images, num_organs, _ = results.shape
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 3, got 1)
+
+JOB STATISTICS
+==============
+Job ID: 7962517
+Cluster: snellius
+User/Group: scur2486/scur2486
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:18
+CPU Efficiency: 3.03% of 00:09:54 core-walltime
+Job Wall-clock time: 00:00:33
+Memory Utilized: 1.72 MB
+Memory Efficiency: 0.00% of 120.00 GB
