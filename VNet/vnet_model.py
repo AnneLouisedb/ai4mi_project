@@ -28,7 +28,9 @@ class VNet(nn.Module):
     def encoder_block(self, in_channels, out_channels, use_pool=True):
         layers = []
         if use_pool:
-            layers.append(nn.MaxPool3d(2))
+            # Check the depth of the input and skip depth pooling if it's too small
+            layers.append(nn.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2)))
+            
         layers.extend([
             nn.Conv3d(in_channels, out_channels, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
@@ -36,6 +38,7 @@ class VNet(nn.Module):
             nn.ReLU(inplace=True)
         ])
         return nn.Sequential(*layers)
+
 
     def decoder_block(self, in_channels, out_channels):
         return nn.Sequential(
@@ -58,8 +61,13 @@ class VNet(nn.Module):
 
     def forward(self, x):
         # Encoder
-        enc1 = self.enc1(x)             # [B, 16, D, H, W]
-        enc2 = self.enc2(enc1)          # [B, 32, D/2, H/2, W/2]
+        if x.shape[2] > 1:  # Check depth dimension
+            enc1 = self.enc1(x)             # [B, 16, D, H, W]
+            enc2 = self.enc2(enc1)          # [B, 32, D/2, H/2, W/2]
+        else:
+            enc1 = self.enc1(x)
+            enc2 = self.enc2[1:](enc1)  # Skip pooling on depth if needed
+
         enc3 = self.enc3(enc2)          # [B, 64, D/4, H/4, W/4]
         enc4 = self.enc4(enc3)          # [B, 128, D/8, H/8, W/8]
         enc5 = self.enc5(enc4)          # [B, 256, D/16, H/16, W/16]
@@ -73,3 +81,4 @@ class VNet(nn.Module):
         # Final Convolution
         out = self.final_conv(dec1)     # [B, num_classes, D, H, W]
         return out
+
