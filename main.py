@@ -33,7 +33,7 @@ from shutil import copytree, rmtree
 import torch
 import numpy as np
 import torch.nn.functional as F
-from torch import nn, Tensor 
+from torch import nn, Tensor
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
@@ -48,7 +48,7 @@ from utils import (Dcm,
                    dice_coef,
                    save_images)
 
-from losses import (CrossEntropy, GeneralizedDice, DiceLoss)
+from losses import (CrossEntropy)
 
 # import Unet and nnUnet
 from UNet.unet_model import UNet
@@ -67,15 +67,58 @@ def initialize_datasets_params(model_name: str) -> None:
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
     elif model_name == 'nnUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
-
-    elif model_name == 'ENet':
+    else:  # Assuming 'enet' or other models
         datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
-    else:
-        raise ValueError(f"Unsupported model: {model_name}. Please choose from ['unet', 'nnunet', 'enet'].")
-
     
     # Add more datasets if needed
     datasets_params["TOY2"] = {'K': 2, 'net': shallowCNN, 'B': 2}
+
+class ReScale:
+    def __init__(self, K):
+        self.scale = 1 / (255 / (K - 1)) if K != 5 else 1 / 63
+
+    def __call__(self, img):
+        return img * self.scale
+
+class Class2OneHot:
+    """
+    Converts class indices in the ground truth masks to one-hot encoded tensors.
+    """
+    def __init__(self, K: int):
+        self.K = K
+
+    def __call__(self, seg: torch.Tensor) -> torch.Tensor:
+        # seg shape: [1, H, W]
+        b, *img_shape = seg.shape  # b should be 1
+        device = seg.device
+
+        # Remove the batch dimension
+        seg = seg.squeeze(0)  # shape: [H, W]
+
+        # One-hot encode
+        res = torch.zeros((self.K, *img_shape), dtype=torch.int32, device=device)
+        res.scatter_(0, seg.unsqueeze(0), 1)  # scatter along channel dimension
+
+        return res
+
+
+def get_filter_function(filter_name: str) -> Any:
+    """
+    Returns the appropriate filter function based on the filter_name.
+    """
+    if filter_name == 'gaussian':
+        return lambda nd: apply_gaussian_filter(nd, sigma=1)
+    elif filter_name == 'median':
+        return lambda nd: apply_median_filter(nd, size=3)
+    elif filter_name == 'non_local_means':
+        return lambda nd: apply_non_local_means_denoising(nd, h=10)
+    elif filter_name == 'bilateral':
+        return lambda nd: apply_bilateral_filtering(nd, d=9, sigmaColor=75, sigmaSpace=75)
+    elif filter_name == 'wavelet':
+        return lambda nd: apply_wavelet_transform_denoising(nd, wavelet='db1')
+    else:
+        raise ValueError(f"Unknown filter: {filter_name}")
+
 
 def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     # Networks and scheduler
@@ -96,38 +139,21 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     B: int = datasets_params[args.dataset]['B']
     root_dir = Path("data") / args.dataset
 
-    # Choose the filter based on the command-line argument (or add custom logic)
-    if args.filter == 'gaussian':
-        filter_func = lambda nd: apply_gaussian_filter(nd, sigma=1)
-    elif args.filter == 'median':
-        filter_func = lambda nd: apply_median_filter(nd, size=3)
-    elif args.filter == 'non_local_means':
-        filter_func = lambda nd: apply_non_local_means_denoising(nd, h=10)
-    elif args.filter == 'bilateral':
-        filter_func = lambda nd: apply_bilateral_filtering(nd, d=9, sigmaColor=75, sigmaSpace=75)
-    elif args.filter == 'wavelet':
-        filter_func = lambda nd: apply_wavelet_transform_denoising(nd, wavelet='db1')
-    else:
-        raise ValueError(f"Unknown filter: {args.filter}")
+    filter_func = get_filter_function(args.filter)
 
     img_transform = transforms.Compose([
-        lambda img: img.convert('L'),
-        lambda img: np.array(img)[np.newaxis, ...],
-        filter_func, # Selected filter function for preprocessing
-        lambda nd: nd / 255,  # max <= 1
-        lambda nd: torch.tensor(nd, dtype=torch.float32)
+        transforms.Lambda(lambda img: img.convert('L')),  # Convert to grayscale
+        transforms.Lambda(lambda img: np.array(img)[np.newaxis, ...]),  # Add channel dimension
+        transforms.Lambda(filter_func),  # Apply selected filter
+        transforms.Lambda(lambda nd: nd / 255.0),  # Scale to [0,1]
+        transforms.Lambda(lambda nd: torch.tensor(nd, dtype=torch.float32))  # Convert to tensor
     ])
 
     gt_transform = transforms.Compose([
-        lambda img: np.array(img)[...],
-        # The idea is that the classes are mapped to {0, 255} for binary cases
-        # {0, 85, 170, 255} for 4 classes
-        # {0, 51, 102, 153, 204, 255} for 6 classes
-        # Very sketchy but that works here and that simplifies visualization
-        lambda nd: nd / (255 / (K - 1)) if K != 5 else nd / 63,  # max <= 1
-        lambda nd: torch.tensor(nd, dtype=torch.int64)[None, ...],  # Add one dimension to simulate batch
-        lambda t: class2one_hot(t, K=K),
-        itemgetter(0)
+        transforms.Lambda(lambda img: np.array(img)[...]),  # Convert to NumPy array
+        ReScale(K),  # Scale based on number of classes
+        transforms.Lambda(lambda nd: torch.tensor(nd, dtype=torch.int64).unsqueeze(0)),  # Add channel dimension
+        Class2OneHot(K)  # One-hot encode
     ])
 
     train_set = SliceDataset('train',
@@ -135,6 +161,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
                              img_transform=img_transform,
                              gt_transform=gt_transform,
                              debug=args.debug)
+    
     train_loader = DataLoader(train_set,
                               batch_size=B,
                               num_workers=args.num_workers,
@@ -145,6 +172,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
                            img_transform=img_transform,
                            gt_transform=gt_transform,
                            debug=args.debug)
+    
     val_loader = DataLoader(val_set,
                             batch_size=B,
                             num_workers=args.num_workers,
@@ -159,25 +187,12 @@ def runTraining(args):
     print(f">>> Setting up to train on {args.dataset} with {args.mode}")
     net, optimizer, device, train_loader, val_loader, K = setup(args)
 
-    if args.loss == 'CE':
-        if args.mode == "full":
-            loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
-        elif args.mode in ["partial"] and args.dataset in ['SEGTHOR', 'SEGTHOR_STUDENTS']:
-            loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
-        else:
-            raise ValueError(args.mode, args.dataset)
-
-    elif args.loss == 'Dice':
-        loss_fn = DiceLoss(idk=list(range(K)))
-    elif args.loss == 'DiceCE':
-        ce_loss = CrossEntropy(idk=list(range(K)))
-        dice_loss = DiceLoss(idk=list(range(K)))
-        loss_fn = lambda pred, target: ce_loss(pred, target) + dice_loss(pred, target)
+    if args.mode == "full":
+        loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
+    elif args.mode in ["partial"] and args.dataset in ['SEGTHOR', 'SEGTHOR_STUDENTS']:
+        loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
     else:
-        raise ValueError(f"Unsupported loss function: {args.loss}")
-
-    print(f">>> Using {args.loss} loss function")
-
+        raise ValueError(args.mode, args.dataset)
 
     # Notice one has the length of the _loader_, and the other one of the _dataset_
     log_loss_tra: Tensor = torch.zeros((args.epochs, len(train_loader)))
@@ -188,24 +203,23 @@ def runTraining(args):
     best_dice: float = 0
 
     for e in range(args.epochs):
-        for m in ['train', 'val']:
-            match m:
-                case 'train':
-                    net.train()
-                    opt = optimizer
-                    cm = Dcm
-                    desc = f">> Training   ({e: 4d})"
-                    loader = train_loader
-                    log_loss = log_loss_tra
-                    log_dice = log_dice_tra
-                case 'val':
-                    net.eval()
-                    opt = None
-                    cm = torch.no_grad
-                    desc = f">> Validation ({e: 4d})"
-                    loader = val_loader
-                    log_loss = log_loss_val
-                    log_dice = log_dice_val
+        for m in ['train', 'val']:            
+            if m == 'train':
+                net.train()
+                opt = optimizer
+                cm = Dcm
+                desc = f">> Training   ({e: 4d})"
+                loader = train_loader
+                log_loss = log_loss_tra
+                log_dice = log_dice_tra
+            elif m == 'val':
+                net.eval()
+                opt = None
+                cm = torch.no_grad
+                desc = f">> Validation ({e: 4d})"
+                loader = val_loader
+                log_loss = log_loss_val
+                log_dice = log_dice_val
 
             with cm():  # Either dummy context manager, or the torch.no_grad for validation
                 j = 0
@@ -289,13 +303,9 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='ENet', help="Which model to use? [ENet, UNet, nnUNet]" )
-    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], default = 'gaussian',
-                        help="Filter to apply for preprocessing.")
-
-    # WE ADDDED A LOSS FUNCTION
-    parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE'],
-                    help="Loss function to use. CE: Cross Entropy, Dice: Dice Loss, DiceCE: Combined Dice and CE")
+    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, nnUNet]" )
+    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'],
+                        required=True, help="Filter to apply for preprocessing.")
     
     args = parser.parse_args()
 
