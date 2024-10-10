@@ -40,6 +40,7 @@ from torch.utils.data import DataLoader
 from dataset import SliceDataset
 from ShallowNet import shallowCNN
 from ENet import ENet
+from VNet.vnet_model_code import VNet
 from utils import (Dcm,
                    class2one_hot,
                    probs2one_hot,
@@ -65,6 +66,8 @@ def initialize_datasets_params(model_name: str) -> None:
     """
     if model_name == 'UNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
+    if model_name == 'VNet':
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': VNet, 'B': 8}
     elif model_name == 'nnUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
     else:  # Assuming 'enet' or other models
