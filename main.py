@@ -317,7 +317,7 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='ENet', help="Which model to use? [ENet, UNet, nnUNet]" )
+    parser.add_argument('--model', default='ENet', help="Which model to use? [ENet, UNet, nnUNet, VNet]" )
     parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], default = 'gaussian',
                         help="Filter to apply for preprocessing.")
     parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE'],
