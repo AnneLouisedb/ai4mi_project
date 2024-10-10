@@ -156,10 +156,40 @@ class Decoder_block(nn.Module):
         # https://github.com/HaiyongJiang/U-Net-Pytorch-Unstructured-Buggy/commit/0e854509c2cea854e247a9c615f175f76fbb2e3a
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
         x = torch.cat([x2, x1], dim=1)
-        
+
         x = self.first_conv(x)
         x = self.second_conv(x)
         return x
+
+
+class DilationBlock(nn.Module):
+    """
+    To build a 4-layer residual block which includes 4 dilation convolution layers with the dilation ratio r=1,2,4,8. The output is the sum of these layers.
+    """
+    def __init__(self, in_channels, out_channels):
+        super(DilationBlock, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=(3, 3), stride=(1, 1), dilation=1, padding=(1, 1)),
+            nn.ReLU())
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), stride=(1, 1), dilation=2, padding=(2, 2)),
+           nn.ReLU())
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), stride=(1, 1), dilation=4, padding=(4, 4)),
+            nn.ReLU())
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), stride=(1, 1), dilation=8, padding=(8, 8)),
+            nn.ReLU())
+      
+
+    def forward(self, x):
+        conv1_output = self.conv1(x)
+        conv2_output = self.conv2(conv1_output)
+        conv3_output = self.conv3(conv2_output)
+        conv4_output = self.conv4(conv3_output)
+      
+        output = conv1_output + conv2_output + conv3_output + conv4_output 
+        return output
 
     
 
