@@ -5,7 +5,7 @@
 #SBATCH --job-name=UNet_CE
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --time=01:40:00
+#SBATCH --time=02:00:00
 #SBATCH --output=slurm_output_%A.out
 
 module purge
