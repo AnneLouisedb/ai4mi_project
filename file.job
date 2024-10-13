@@ -2,10 +2,10 @@
 
 #SBATCH --partition=gpu
 #SBATCH --gpus=1
-#SBATCH --job-name=ENEt
+#SBATCH --job-name=UNet_CE
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --time=03:00:00
+#SBATCH --time=01:40:00
 #SBATCH --output=slurm_output_%A.out
 
 module purge
@@ -15,51 +15,20 @@ module load Anaconda3/2023.07-2
 cd ai4mi_project
 
 source ai4mi/bin/activate
-# python -m pip install -r requirements.txt
+#setup
+#python -m pip install -r requirements.txt
 
-# python transform_data.py
-python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/dice_loss/ce --gpu --model 'UNet' --loss Dice
-python main.py --dataset SEGTHOR --mode full --epoch 25 --dest results/segthor/UNet/diceCE_loss/ce --gpu --model 'UNet' --loss DiceCE
+#transform
+#python transform_data.py
 
-# python main.py --dataset TOY2 --mode full --epoch 25 --dest results/toy2/ce --gpu 
+#train
+python main.py --dataset SEGTHOR --mode full --epoch 50 --dest results/segthor/UNet_CE/ce --gpu --model 'UNet' --loss 'CE'
 
-# python stitch.py --data_folder results/segthor/ENet/ce/best_epoch/val \
-#      --dest_folder volumes/segthor/ENet/ce \
-#      --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" \
-#      --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+#stitch
+python stitch.py --data_folder results/segthor/UNet_CE/ce/best_epoch/val --dest_folder volumes/segthor/UNet_CE/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
 
-# # Evaluation
-# Enet
+#plot dice loss
+python plot.py --metric_file results/segthor/UNet_CE/ce/dice_val.npy --dest results/segthor/UNet_CE/ce/dice_val.png
 
-#python plot.py --metric_file results/segthor/ENet/ce/dice_val.npy --dest results/segthor/ENet/ce/dice_val.png
-#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/ENet/ce" --model 'ENet' 
-
-# UNet
-#python plot.py --metric_file results/segthor/UNet/ce/dice_val.npy --dest results/segthor/UNet/ce/dice_val.png
-
-# nnUNet
-#vpython plot.py --metric_file results/segthor/nnUNet/ce/dice_val.npy --dest results/segthor/nnUNet/ce/dice_val.png -- model nnunet
-
-#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce"
-
-#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/UNet/ce"
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
-=======
-# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gz
-
-# run the training script for nnUnet
-#python stitch.py --data_folder results/segthor/nnUNet/ce/best_epoch/val --dest_folder volumes/segthor/nnUNet/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
-
-#python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce" --model nnUNet
-
-# run the training script for Enet
-python stitch.py --data_folder results/segthor/nnUNet/ce/best_epoch/val --dest_folder volumes/segthor/ENet/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
-
-python evaluation.py --source_scan_pattern "ai4mi_project/data/segthor_train/train/Patient_{id_}/GT.nii.gz" --prediction_folder "ai4mi_project/volumes/segthor/nnUNet/ce" --model ENet
->>>>>>> Stashed changes
-=======
-# /home/scur1765/ai4mi_project/volumes/segthor/UNet/ce/Patient_28.nii.gzS
->>>>>>> 74b2d6a1812348d3dce5097a59b16727e1cff74a
+#plot hd
+python evaluation.py --model 'UNet' --base_folder 'UNet_CE'

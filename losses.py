@@ -48,6 +48,28 @@ class CrossEntropy():
 
         return loss
 
+class Weighted_CrossEntropy():
+    def _init_(self, **kwargs):
+        # Self.idk is used to filter out some classes of the target mask. Use fancy indexing
+        self.idk = kwargs['idk'] 
+        self.class_weights = kwargs['weight']
+        
+        print(f"Initialized {self._class.name_} with {kwargs}")
+
+    def _call_(self, pred_softmax, weak_target):
+        assert pred_softmax.shape == weak_target.shape
+        assert simplex(pred_softmax)
+        assert sset(weak_target, [0, 1])
+
+        log_p = (pred_softmax[:, self.idk, ...] + 1e-10).log()
+        mask = weak_target[:, self.idk, ...].float()
+
+        weighted_log_p = log_p * self.class_weights.view(1, -1, 1, 1)
+
+        loss = - einsum("bkwh,bkwh->", mask, weighted_log_p)
+        loss /= mask.sum() + 1e-10
+
+        return loss
 
 class PartialCrossEntropy(CrossEntropy):
     def __init__(self, **kwargs):
@@ -75,6 +97,42 @@ class GeneralizedDice():
         loss = divided.mean()
 
         return loss
+
+
+class MulticlassDice():
+    def __init__(self, **kwargs):
+        self.idk: List[int] = kwargs["idk"]
+        print(f"Initialized {self.__class__.__name__} with {kwargs}")
+
+    def __call__(self, probs: Tensor, target: Tensor) -> Tensor:
+        assert simplex(probs) and simplex(target)
+
+        # Predicted and true class probabilities for the given classes (idk)
+        pc = probs[:, self.idk, ...].type(torch.float32)  # Predicted probs
+        tc = target[:, self.idk, ...].type(torch.float32)  # True labels
+
+        # Shape: batch_size, num_classes, height, width
+        batch_size, num_classes, h, w = pc.shape
+
+        # Flatten height and width into a single dimension (number of pixels)
+        pc = pc.view(batch_size, num_classes, -1)
+        tc = tc.view(batch_size, num_classes, -1)
+
+        # Intersection (numerator): sum of element-wise multiplication between target and prediction
+        intersection: Tensor = torch.sum(pc * tc, dim=-1)
+
+        # Union (denominator): sum of predictions and target values for each class
+        union: Tensor = torch.sum(pc, dim=-1) + torch.sum(tc, dim=-1)
+
+        # Dice coefficient for each class (for each batch)
+        dice_per_class: Tensor = 2 * intersection / (union + 1e-10)
+
+        # Averaging over classes and batch
+        dice_loss = 1 - dice_per_class.mean()
+        
+        print("Dice loss:", dice_loss)
+
+        return dice_loss
 
 
 class DiceLoss():

@@ -40,7 +40,6 @@ from torch.utils.data import DataLoader
 from dataset import SliceDataset
 from ShallowNet import shallowCNN
 from ENet import ENet
-from VNet.vnet_model_code import VNet
 from utils import (Dcm,
                    class2one_hot,
                    probs2one_hot,
@@ -49,11 +48,12 @@ from utils import (Dcm,
                    dice_coef,
                    save_images)
 
-from losses import (CrossEntropy, GeneralizedDice, DiceLoss)
+from losses import (CrossEntropy, Weighted_CrossEntropy, MulticlassDice, GeneralizedDice, DiceLoss)
 
 # import Unet and nnUnet
-from UNet.unet_model import UNet
+from UNet.unet_model import UNet, SUNet
 from nnUnet.nnUnet import nnUNet
+from VNet.vnet_model_code import VNet
 
 # Import denoising filters
 from preprocessing import apply_gaussian_filter, apply_median_filter, apply_non_local_means_denoising, apply_bilateral_filtering, apply_wavelet_transform_denoising
@@ -66,10 +66,12 @@ def initialize_datasets_params(model_name: str) -> None:
     """
     if model_name == 'UNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
-    if model_name == 'VNet':
+    elif model_name == 'VNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': VNet, 'B': 8}
     elif model_name == 'nnUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
+    elif model_name == 'SUNet':
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': SUNet, 'B': 8}
     else:  # Assuming 'enet' or other models
         datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
     
@@ -120,7 +122,7 @@ def get_filter_function(filter_name: str) -> Any:
     elif filter_name == 'wavelet':
         return lambda nd: apply_wavelet_transform_denoising(nd, wavelet='db1')
     else:
-        raise ValueError(f"Unknown filter: {filter_name}")
+        return lambda nd: nd
 
 
 def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
@@ -143,7 +145,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     root_dir = Path("data") / args.dataset
 
     filter_func = get_filter_function(args.filter)
-
+    
     img_transform = transforms.Compose([
         transforms.Lambda(lambda img: img.convert('L')),  # Convert to grayscale
         transforms.Lambda(lambda img: np.array(img)[np.newaxis, ...]),  # Add channel dimension
@@ -151,7 +153,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
         transforms.Lambda(lambda nd: nd / 255.0),  # Scale to [0,1]
         transforms.Lambda(lambda nd: torch.tensor(nd, dtype=torch.float32))  # Convert to tensor
     ])
-
+    
     gt_transform = transforms.Compose([
         transforms.Lambda(lambda img: np.array(img)[...]),  # Convert to NumPy array
         ReScale(K),  # Scale based on number of classes
@@ -189,12 +191,16 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 def runTraining(args):
     print(f">>> Setting up to train on {args.dataset} with {args.mode}")
     net, optimizer, device, train_loader, val_loader, K = setup(args)
-    
+
     if args.loss == 'CE':
         if args.mode == "full":
             loss_fn = CrossEntropy(idk=list(range(K)))  # Supervise both background and foreground
         elif args.mode in ["partial"] and args.dataset in ['SEGTHOR', 'SEGTHOR_STUDENTS']:
             loss_fn = CrossEntropy(idk=[0, 1, 3, 4])  # Do not supervise the heart (class 2)
+        elif args.mode == 'weighted':
+            class_weights = [1/98.95, 1/0.05, 1/0.78, 1/0.03, 1/0.20]
+            class_weights = [1/98.95, 1/0.05, 0, 1/0.03, 1/0.20]
+            loss_fn = CrossEntropy(weight=class_weights, idk=list(range(K))) 
         else:
             raise ValueError(args.mode, args.dataset)
     elif args.loss == 'Dice':
@@ -203,10 +209,13 @@ def runTraining(args):
         ce_loss = CrossEntropy(idk=list(range(K)))
         dice_loss = DiceLoss(idk=list(range(K)))
         loss_fn = lambda pred, target: ce_loss(pred, target) + dice_loss(pred, target)
+    elif args.loss == 'generalised_dice':
+        loss_fn = GeneralizedDice(idk=list(range(K)))
+    elif args.loss == 'multiclass_dice':
+        loss_fn = MulticlassDice(idk=list(range(K)))
+
     else:
         raise ValueError(f"Unsupported loss function: {args.loss}")
-    
-    print(f">>> Using {args.loss} loss function")
 
     # Notice one has the length of the _loader_, and the other one of the _dataset_
     log_loss_tra: Tensor = torch.zeros((args.epochs, len(train_loader)))
@@ -308,7 +317,7 @@ def main():
 
     parser.add_argument('--epochs', default=200, type=int)
     parser.add_argument('--dataset', choices=['SEGTHOR', 'TOY2'], required=True, help='Dataset name')
-    parser.add_argument('--mode', default='full', choices=['partial', 'full'])
+    parser.add_argument('--mode', default='full', choices=['partial', 'full', 'weighted'])
     parser.add_argument('--dest', type=Path, required=True,
                         help="Destination directory to save the results (predictions and weights).")
 
@@ -317,12 +326,10 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='ENet', help="Which model to use? [ENet, UNet, nnUNet, VNet]" )
-    parser.add_argument('--filter', choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], default = 'gaussian',
-                        help="Filter to apply for preprocessing.")
-    parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE'],
+    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, nnUNet, VNet, SUNet]" )
+    parser.add_argument('--filter', default= None, choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], help="Filter to apply for preprocessing.")
+    parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice'],
                     help="Loss function to use. CE: Cross Entropy, Dice: Dice Loss, DiceCE: Combined Dice and CE")
-    
     args = parser.parse_args()
 
     pprint(args)

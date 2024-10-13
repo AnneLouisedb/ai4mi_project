@@ -8,7 +8,7 @@ import torch.nn.functional as F
 class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2"""
 
-    def __init__(self, in_channels, out_channels, mid_channels=None):
+    def __init__(self, in_channels, out_channels, mid_channels=None, dropout_prob=0.2):
         super().__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -16,9 +16,11 @@ class DoubleConv(nn.Module):
             nn.Conv2d(in_channels, mid_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(mid_channels),
             nn.ReLU(inplace=True),
+           
             nn.Conv2d(mid_channels, out_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
+            
         )
 
     def forward(self, x):
@@ -71,12 +73,14 @@ class Up(nn.Module):
 class OutConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(OutConv, self).__init__()
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1,)
 
     def forward(self, x):
-        return self.conv(x)
+        x = self.conv(x)
+        print("final output dimension,", x.shape) #  torch.Size([8, 5, 256, 256])
+        return x
 
-####################
+###################
 # SUNET
 
 
@@ -98,26 +102,24 @@ class Encoder_block(nn.Module):
             nn.ReLU(inplace=True),
             nn.BatchNorm2d(out_channels))
         
-        # Residual connection to match dimensions before concatenation
-        self.residual = nn.Conv2d(in_channels, mid_channels, kernel_size=1, padding=0)
-
+    
         self.maxpool =  nn.Sequential(
-            nn.MaxPool2d(2))
+            nn.MaxPool2d(kernel_size=2, stride=2))
+            #nn.MaxPool2d(2)) # 2 x 2  - I want to max pool the first dimension, 
 
     def forward(self, x):
-        
+      
+      
         conv1_output = self.first_conv(x)
-        
-        conv2_output = self.second_conv(conv1_output)
+        conv2_output = self.second_conv(conv1_output) #dimension second torch.Size([8, 64, 256, 256])
+        concat_output = conv2_output + conv1_output
 
-        residual_output = self.residual(conv1_output)
-
-        concat_output = torch.cat([conv2_output, residual_output], dim=1)
-        
         # Max pooling
-        pooled_output = self.maxpool(concat_output)
+        pooled_output = self.maxpool(concat_output) # 2 x 2 
 
-        return pooled_output
+        print('pooled', pooled_output.shape)
+
+        return pooled_output # we need to double the second dimension, but how??? torch.Size([8, 32, 256, 256]) to  torch.Size([8, 64, 256, 256]) 
     
        
 class Decoder_block(nn.Module):
@@ -126,26 +128,25 @@ class Decoder_block(nn.Module):
         super().__init__()
 
         # if bilinear, use the normal convolutions to reduce the number of channels
-        if bilinear:
-            self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+        #if bilinear:
+        self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
 
-            self.first_conv = nn.Sequential(
-                nn.Conv2d(in_channels, in_channels // 2, kernel_size=3, padding=1, bias=False),
-                nn.ReLU(inplace=True),
-                nn.BatchNorm2d(in_channels // 2))
-            
-            self.second_conv = nn.Sequential(
-                nn.Conv2d(in_channels // 2, out_channels, kernel_size=3, padding=1, bias=False),
-                nn.ReLU(inplace=True),
-                nn.BatchNorm2d(out_channels))
+        self.first_conv = nn.Sequential(
+            nn.Conv2d(2* in_channels , in_channels , kernel_size=3, padding=1, bias=False),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm2d(in_channels))
+        
+        self.second_conv = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm2d(out_channels))
 
             
-        # else:
-        #     self.up = nn.ConvTranspose2d(in_channels, in_channels // 2, kernel_size=2, stride=2)
-        #     self.conv = DoubleConv(in_channels, out_channels)
 
     def forward(self, x1, x2):
+        print('input decoder', x1.shape) # input decoder torch.Size([8, 256, 16, 16])
         x1 = self.up(x1)
+        print('upsample', x1.shape) # upsample torch.Size([8, 256, 32, 32])
         # input is CHW
         diffY = x2.size()[2] - x1.size()[2]
         diffX = x2.size()[3] - x1.size()[3]
@@ -156,10 +157,33 @@ class Decoder_block(nn.Module):
         # https://github.com/HaiyongJiang/U-Net-Pytorch-Unstructured-Buggy/commit/0e854509c2cea854e247a9c615f175f76fbb2e3a
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
         x = torch.cat([x2, x1], dim=1)
+        print('cat', x.shape) # cat torch.Size([8, 512, 16, 16])
 
         x = self.first_conv(x)
+        print('conv', x.shape)
         x = self.second_conv(x)
+        print('output second', x.shape)
+        
         return x
+
+class SDoubleConv(nn.Module):
+    """(convolution =>  ReLU  => [BN]) * 2"""
+
+    def __init__(self, in_channels, out_channels, mid_channels=None):
+        super().__init__()
+        if not mid_channels:
+            mid_channels = out_channels
+        self.double_conv = nn.Sequential(
+            nn.Conv2d(in_channels, mid_channels, kernel_size=3, padding=1, bias=False),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm2d(mid_channels),
+            
+            nn.Conv2d(mid_channels, out_channels, kernel_size=3, padding=1, bias=False),
+            nn.ReLU(inplace=True),
+            nn.BatchNorm2d(out_channels))
+
+    def forward(self, x):
+        return self.double_conv(x)
 
 
 class DilationBlock(nn.Module):
@@ -189,8 +213,5 @@ class DilationBlock(nn.Module):
         conv4_output = self.conv4(conv3_output)
       
         output = conv1_output + conv2_output + conv3_output + conv4_output 
+        print("dilated block", output.shape)
         return output
-
-    
-
-

@@ -59,69 +59,71 @@ class UNet(nn.Module): #(1, K) - one channel, K classes
 
     def init_weights(self, *args, **kwargs):
                 self.apply(random_weights_init)
+            
 
-
-
-# Reconstruction the SU-Net as by https://arxiv.org/pdf/1905.07710
-                
-
-class SUNet(nn.Module): #(1, K) - one channel, K classes
+class SUNet(nn.Module):  # (1, K) - one channel, K classes
     def __init__(self, n_channels, n_classes, bilinear=False):
-        super(UNet, self).__init__()
+        super(SUNet, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
 
-        self.down1 = (Encoder_block(n_channels, 32))
-        self.down2 = (Encoder_block(32, 64))
-        self.down3 = (Encoder_block(64, 128))
-        self.down4 = (Encoder_block(128, 256))
-        
+        self.inc = SDoubleConv(n_channels, 16)
+        self.down1 = Encoder_block(16, 32)
+        self.down2 = Encoder_block(32, 64)
+        self.down3 = Encoder_block(64, 128)
+        self.down4 = Encoder_block(128, 256)
+
         factor = 2 if bilinear else 1
 
-        # 1 - 2- 4- 8 (each connected with residual connection all are summed in the end)
-        # each with a dilatedconv2D
+        # Bottleneck with dilated convolution
         self.bot = DilationBlock(256, 256)
 
-        self.up1 = (Decoder_block(256, 256 // factor, bilinear))
-        self.up2 = (Decoder_block(128, 128 // factor, bilinear))
-        self.up3 = (Decoder_block(64, 64 // factor, bilinear))
-        self.up4 = (Decoder_block(32,32 // factor, bilinear))
-        self.outc = (OutConv(16, n_classes))
+        # Decoder blocks
+        self.up1 = Decoder_block(256, 128, bilinear)
+        self.up2 = Decoder_block(128, 64, bilinear)
+        self.up3 = Decoder_block(64, 32, bilinear)
+        self.up4 = Decoder_block(32, 16, bilinear)
+
+        # Extra upsampling to ensure the output is the same size as the input
+        self.final_upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+
+        # Final output layer
+        self.outc = OutConv(16, n_classes)
 
     def forward(self, x):
-     
-        x1= self.down1(x)
+        x0 = self.inc(x)
+        x1 = self.down1(x0)
         x2 = self.down2(x1)
         x3 = self.down3(x2)
         x4 = self.down4(x3)
 
         x5 = self.bot(x4)
 
+        # Decoder path
         x = self.up1(x5, x4)
         x = self.up2(x, x3)
         x = self.up3(x, x2)
         x = self.up4(x, x1)
+
+        # Apply the additional upsampling to match the input size
+        x = self.final_upsample(x)
+
         logits = self.outc(x)
         return logits
 
     def use_checkpointing(self):
-        
         self.down1 = torch.utils.checkpoint(self.down1)
         self.down2 = torch.utils.checkpoint(self.down2)
         self.down3 = torch.utils.checkpoint(self.down3)
         self.down4 = torch.utils.checkpoint(self.down4)
-
         self.bot = torch.utils.checkpoint(self.bot)
-
         self.up1 = torch.utils.checkpoint(self.up1)
         self.up2 = torch.utils.checkpoint(self.up2)
         self.up3 = torch.utils.checkpoint(self.up3)
         self.up4 = torch.utils.checkpoint(self.up4)
         self.outc = torch.utils.checkpoint(self.outc)
 
-    # this is added 
-     
-
+    # Weight initialization method
     def init_weights(self, *args, **kwargs):
-                self.apply(random_weights_init)
+        self.apply(random_weights_init)
