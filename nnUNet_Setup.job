@@ -26,7 +26,7 @@ mkdir nnUNet_results
 
 cd ..
 
-python nnUnet_transform_data.py --dataset_id 1 --dataset_name 'SegTHOR'--data_dir 'data/segthor_train' --nnUNet_raw 'nnUNet/nnUNet_raw' --nnUNet_preprocessed 'nnUNet/nnUNet_preprocessed'
+python nnUnet_transform_data.py --data_dir 'data/segthor_train' --nnUNet_raw 'nnUNet/nnUNet_raw' --nnUNet_preprocessed 'nnUNet/nnUNet_preprocessed'
 
 cd nnUNet
 
