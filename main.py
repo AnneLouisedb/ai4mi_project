@@ -58,6 +58,10 @@ from VNet.vnet_model_code import VNet
 # Import denoising filters
 from preprocessing import apply_gaussian_filter, apply_median_filter, apply_non_local_means_denoising, apply_bilateral_filtering, apply_wavelet_transform_denoising
 
+
+# Import data augmentation
+from data_augmentation import RandomCrop
+
 datasets_params: dict[str, dict[str, Any]] = {}
 
 def initialize_datasets_params(model_name: str) -> None:
@@ -145,6 +149,11 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     root_dir = Path("data") / args.dataset
 
     filter_func = get_filter_function(args.filter)
+
+    # Apply augmentations (RandomCrop) after basic preprocessing
+    def apply_random_crop(img, seg):
+        random_crop = RandomCrop(output_size=(args.random_crop_h, args.random_crop_w))  # Specify your desired size
+        return random_crop(img, seg)
     
     img_transform = transforms.Compose([
         transforms.Lambda(lambda img: img.convert('L')),  # Convert to grayscale
@@ -165,6 +174,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
                              root_dir,
                              img_transform=img_transform,
                              gt_transform=gt_transform,
+                             custom_transform=apply_random_crop,
                              debug=args.debug)
     
     train_loader = DataLoader(train_set,
@@ -330,6 +340,9 @@ def main():
     parser.add_argument('--filter', default= None, choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], help="Filter to apply for preprocessing.")
     parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice'],
                     help="Loss function to use. CE: Cross Entropy, Dice: Dice Loss, DiceCE: Combined Dice and CE")
+    parser.add_argument('--random_crop_h', default= 100, help="Height for random crop.")
+    parser.add_argument('--random_crop_w', default= 100, help="Width for random crop.")
+
     args = parser.parse_args()
 
     pprint(args)

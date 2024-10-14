@@ -46,10 +46,11 @@ def make_dataset(root, subset) -> list[tuple[Path, Path]]:
 
 class SliceDataset(Dataset):
     def __init__(self, subset, root_dir, img_transform=None,
-                 gt_transform=None, augment=False, equalize=False, debug=False):
+                 gt_transform=None, custom_transform=None, augment=False, equalize=False, debug=False):
         self.root_dir: str = root_dir
         self.img_transform: Callable = img_transform
         self.gt_transform: Callable = gt_transform
+        self.custom_transform: Callable = custom_transform  
         self.augmentation: bool = augment
         self.equalize: bool = equalize
 
@@ -68,6 +69,10 @@ class SliceDataset(Dataset):
         img: Tensor = self.img_transform(Image.open(img_path))
         gt: Tensor = self.gt_transform(Image.open(gt_path))
 
+        # Apply the custom transform (e.g., random crop) if provided
+        if self.custom_transform:
+            img, gt = self.custom_transform(img, gt)
+            
         _, W, H = img.shape
         K, _, _ = gt.shape
         assert gt.shape == (K, W, H)
