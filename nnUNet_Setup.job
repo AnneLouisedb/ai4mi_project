@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=nnUNet_setup
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=01:00:00
+#SBATCH --output=slurm_output_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2022.05
+
+cd ai4mi_project
+
+source ai4mi/bin/activate
+
+git clone https://github.com/MIC-DKFZ/nnUNet.git
+
+cd nnUNet
+
+pip install -e .
+
+mkdir nnUNet_results
+
+cd ..
+
+python nnUnet_transform_data.py --dataset_id 1 --dataset_name 'SegTHOR'--data_dir 'data/segthor_train' --nnUNet_raw 'nnUNet/nnUNet_raw' --nnUNet_preprocessed 'nnUNet/nnUNet_preprocessed'
+
+cd nnUNet
+
+nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity 
