@@ -23,6 +23,7 @@ export nnUNet_results="/home/scur2494/ai4mi_project/nnUNet/nnUNet_results"
 #replace with your home directory before running.
 
 nnUNetv2_train 1 2d 1
+python plot_dice_nnUNet --file '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/fold_1/training_log_2024_10_15_15_54_21.txt' --dest '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/dice.png' 
 #2D version
 
 nnUNetv2_train 1 3d_fullres 1
