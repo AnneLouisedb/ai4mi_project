@@ -16,6 +16,12 @@ cd ai4mi_project
 
 source ai4mi/bin/activate
 
+export nnUNet_raw="/home/scur2494/ai4mi_project/nnUNet/nnUNet_raw"
+export nnUNet_preprocessed="/home/scur2494/ai4mi_project/nnUNet/nnUNet_preprocessed"
+export nnUNet_results="/home/scur2494/ai4mi_project/nnUNet/nnUNet_results"
+
+#replace with your home directory before running.
+
 git clone https://github.com/MIC-DKFZ/nnUNet.git
 
 cd nnUNet
@@ -23,6 +29,7 @@ cd nnUNet
 pip install -e .
 
 mkdir nnUNet_results
+mkdir nnUNet_preprocessed
 
 cd ..
 
