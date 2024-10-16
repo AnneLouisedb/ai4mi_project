@@ -8,3 +8,4 @@ scikit-image
 matplotlib
 PyWavelets
 opencv-python
+SimpleITK

@@ -2,7 +2,7 @@
 
 #SBATCH --partition=gpu
 #SBATCH --gpus=1
-#SBATCH --job-name=UNet_CE
+#SBATCH --job-name=SUNet_Hyb_CE
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=02:00:00
@@ -22,13 +22,13 @@ source ai4mi/bin/activate
 #python transform_data.py
 
 #train
-python main.py --dataset SEGTHOR --mode full --epoch 50 --dest results/segthor/UNet_CE/ce --gpu --model 'UNet' --loss 'CE'
+python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'SUNet' --loss 'tversky' --resume 'model/ce_model.pkl'
 
 #stitch
-python stitch.py --data_folder results/segthor/UNet_CE/ce/best_epoch/val --dest_folder volumes/segthor/UNet_CE/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+python stitch.py --data_folder results/segthor/SUNet_Hyb_CE/ce/best_epoch/val --dest_folder volumes/segthor/SUNet_Hyb_CE/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
 
 #plot dice loss
-python plot.py --metric_file results/segthor/UNet_CE/ce/dice_val.npy --dest results/segthor/UNet_CE/ce/dice_val.png
+python plot.py --metric_file results/segthor/SUNet_Hyb_CE/ce/dice_val.npy --dest results/segthor/SUNet_Hyb_CE/ce/dice_val.png
 
 #plot hd
-python evaluation.py --model 'UNet' --base_folder 'UNet_CE'
+python evaluation.py --model 'SUNet' --base_folder 'SUNet_Hyb_CE'

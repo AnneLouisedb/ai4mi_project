@@ -154,3 +154,54 @@ class DiceLoss():
         loss = divided.mean()
 
         return loss
+
+class TverskyLoss:
+    def __init__(self, alpha=0.5, beta=0.5, **kwargs):
+        """
+        Initializes the TverskyLoss.
+
+        Parameters:
+        - alpha (float): Weight of false positives.
+        - beta (float): Weight of false negatives.
+        - kwargs: Additional keyword arguments (e.g., 'idk' for class filtering).
+        """
+        self.alpha = alpha
+        self.beta = beta
+        self.idk: List[int] = kwargs.get("idk", [])
+        print(f"Initialized {self.__class__.__name__} with alpha={alpha}, beta={beta}, idk={self.idk}")
+
+    def __call__(self, probs: Tensor, target: Tensor) -> Tensor:
+        """
+        Computes the Tversky loss.
+
+        Parameters:
+        - probs (Tensor): Predicted probabilities (after softmax or sigmoid).
+        - target (Tensor): Ground truth labels.
+
+        Returns:
+        - loss (Tensor): Computed Tversky loss.
+        """
+        assert probs.shape == target.shape, "Shape mismatch between predictions and targets."
+        assert simplex(probs), "Predictions are not simplex."
+        assert sset(target, [0, 1]), "Targets must be binary."
+
+        if self.idk:
+            probs = probs[:, self.idk, ...]
+            target = target[:, self.idk, ...]
+
+        # Flatten the tensors to (batch_size, num_classes, -1) for easier computation
+        probs_flat = probs.view(probs.size(0), probs.size(1), -1)
+        target_flat = target.view(target.size(0), target.size(1), -1)
+
+        # True Positives, False Positives & False Negatives
+        TP = (probs_flat * target_flat).sum(dim=2)
+        FP = (probs_flat * (1 - target_flat)).sum(dim=2)
+        FN = ((1 - probs_flat) * target_flat).sum(dim=2)
+
+        # Compute Tversky index
+        Tversky_index = TP / (TP + self.alpha * FP + self.beta * FN + 1e-10)
+
+        # Tversky loss is 1 - Tversky index
+        loss = 1 - Tversky_index
+
+        return loss.mean()

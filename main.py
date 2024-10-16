@@ -24,7 +24,7 @@
 
 import argparse
 import warnings
-from typing import Any
+from typing import Any, List, Optional
 from pathlib import Path
 from pprint import pprint
 from operator import itemgetter
@@ -48,12 +48,11 @@ from utils import (Dcm,
                    dice_coef,
                    save_images)
 
-from losses import (CrossEntropy, Weighted_CrossEntropy, MulticlassDice, GeneralizedDice, DiceLoss)
+from losses import (CrossEntropy, Weighted_CrossEntropy, MulticlassDice, GeneralizedDice, DiceLoss, TverskyLoss)
 
 # import Unet and nnUnet
 from UNet.unet_model import UNet, SUNet
-from nnUnet.nnUnet import nnUNet
-from VNet.vnet_model_code import VNet
+from VNet.vnet_model import VNet
 
 # Import denoising filters
 from preprocessing import apply_gaussian_filter, apply_median_filter, apply_non_local_means_denoising, apply_bilateral_filtering, apply_wavelet_transform_denoising
@@ -72,8 +71,6 @@ def initialize_datasets_params(model_name: str) -> None:
         datasets_params["SEGTHOR"] = {'K': 5, 'net': UNet, 'B': 8}
     elif model_name == 'VNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': VNet, 'B': 8}
-    elif model_name == 'nnUNet':
-        datasets_params["SEGTHOR"] = {'K': 5, 'net': nnUNet, 'B': 8}
     elif model_name == 'SUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': SUNet, 'B': 8}
     else:  # Assuming 'enet' or other models
@@ -140,9 +137,28 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     net = datasets_params[args.dataset]['net'](1, K)
     net.init_weights()
     net.to(device)
+    model = net
 
     lr = 0.0005
-    optimizer = torch.optim.Adam(net.parameters(), lr=lr, betas=(0.9, 0.999))
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, betas=(0.9, 0.999))
+
+    start_epoch = 0
+    best_dice = 0.0
+
+    if args.resume:
+        # Load the checkpoint as a dictionary
+        checkpoint = torch.load(args.resume, map_location=device)
+        if isinstance(checkpoint, dict):
+            # Load model state_dict
+            model.load_state_dict(checkpoint['model_state_dict'])
+            # Load optimizer state_dict
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            # Extract start_epoch and best_dice
+            start_epoch = checkpoint.get('epoch', 0) + 1
+            best_dice = checkpoint.get('best_dice', 0.0)
+            print(f">>> Loaded checkpoint from {args.resume} (Epoch {start_epoch-1}) with best_dice = {best_dice:.3f}")
+        else:
+            raise ValueError("Checkpoint is not a dictionary. Ensure that the checkpoint contains necessary keys.")
 
     # Dataset part
     B: int = datasets_params[args.dataset]['B']
@@ -195,7 +211,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 
     args.dest.mkdir(parents=True, exist_ok=True)
 
-    return (net, optimizer, device, train_loader, val_loader, K)
+    return (model, optimizer, device, train_loader, val_loader, K)
 
 
 def runTraining(args):
@@ -336,12 +352,13 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, nnUNet, VNet, SUNet]" )
+    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, VNet, SUNet]" )
     parser.add_argument('--filter', default= None, choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], help="Filter to apply for preprocessing.")
-    parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice'],
+    parser.add_argument('--loss', default='Tversky', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice', 'tversky'],
                     help="Loss function to use. CE: Cross Entropy, Dice: Dice Loss, DiceCE: Combined Dice and CE")
     parser.add_argument('--random_crop_h', default= 100, help="Height for random crop.")
     parser.add_argument('--random_crop_w', default= 100, help="Width for random crop.")
+    parser.add_argument('--resume', type=Path, default=None, help="Path to a .pkl model to resume training from.")
 
     args = parser.parse_args()
 
