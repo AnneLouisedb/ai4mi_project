@@ -62,11 +62,18 @@ class UNet(nn.Module): #(1, K) - one channel, K classes
             
 
 class UNetDR(nn.Module):  # (1, K) - one channel, K classes
-    def __init__(self, n_channels, n_classes, bilinear=False):
+    def __init__(self, n_channels, n_classes, bilinear=False, deep_supervision=False):
         super(UNetDR, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
+        self.decoder = nn.Identity()  # Placeholder
+        self.deep_supervision = False #deep_supervision
+
+        self.outnew1 = OutConv(128, 5)
+        self.outnew2 = OutConv(64, 5)
+        self.outnew3 = OutConv(32, 5)
+
 
         self.inc = SDoubleConv(n_channels, 16)
         self.down1 = Encoder_block(16, 32)
@@ -74,16 +81,15 @@ class UNetDR(nn.Module):  # (1, K) - one channel, K classes
         self.down3 = Encoder_block(64, 128)
         self.down4 = Encoder_block(128, 256)
 
-        factor = 2 if bilinear else 1
-
+        
         # Bottleneck with dilated convolution
         self.bot = DilationBlock(256, 256)
 
         # Decoder blocks
-        self.up1 = Decoder_block(256, 128, bilinear)
-        self.up2 = Decoder_block(128, 64, bilinear)
-        self.up3 = Decoder_block(64, 32, bilinear)
-        self.up4 = Decoder_block(32, 16, bilinear)
+        self.up1 = Decoder_block(256, 128)
+        self.up2 = Decoder_block(128, 64)
+        self.up3 = Decoder_block(64, 32)
+        self.up4 = Decoder_block(32, 16)
 
         # Extra upsampling to ensure the output is the same size as the input
         self.final_upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
@@ -91,16 +97,26 @@ class UNetDR(nn.Module):  # (1, K) - one channel, K classes
         # Final output layer
         self.outc = OutConv(16, n_classes)
 
+    def set_deep_supervision(self, enabled):
+        self.deep_supervision = enabled
+
+  
     def forward(self, x):
+        # print("DEEP SUPERVISION?", self.deep_supervision)
         x0 = self.inc(x)
+        
         x1 = self.down1(x0)
+       
         x2 = self.down2(x1)
+      
         x3 = self.down3(x2)
+        
         x4 = self.down4(x3)
+       
 
         x5 = self.bot(x4)
 
-        # Decoder path
+        #Decoder path
         x = self.up1(x5, x4)
         x = self.up2(x, x3)
         x = self.up3(x, x2)
@@ -109,8 +125,28 @@ class UNetDR(nn.Module):  # (1, K) - one channel, K classes
         # Apply the additional upsampling to match the input size
         x = self.final_upsample(x)
 
-        logits = self.outc(x)
-        return logits
+        # output = self.outc(x)
+        # return output
+
+        x = self.up1(x5, x4)
+
+        x = x.to(torch.float32)
+        ds4 =  self.outnew1(x)
+
+        x = self.up2(x, x3)
+        ds3 = self.outnew2(x)
+
+        x = self.up3(x, x2)
+        ds2 = self.outnew3(x) 
+        x = self.up4(x, x1)
+       
+        ds1 = self.outc(self.final_upsample(x)) 
+
+        if self.deep_supervision:
+            return [ds1, ds2, ds3, ds4] # output is a tensor, but it should be a list
+        else:
+            return ds1
+
 
     def use_checkpointing(self):
         self.down1 = torch.utils.checkpoint(self.down1)

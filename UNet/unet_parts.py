@@ -122,11 +122,10 @@ class Encoder_block(nn.Module):
        
 class Decoder_block(nn.Module):
 
-    def __init__(self, in_channels, out_channels, bilinear=True):
+    def __init__(self, in_channels, out_channels):
         super().__init__()
 
-        # if bilinear, use the normal convolutions to reduce the number of channels
-        #if bilinear:
+        # decoder block uses bilinear upsampling
         self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
 
         self.first_conv = nn.Sequential(
