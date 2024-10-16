@@ -69,10 +69,10 @@ def plot_pseudo_dice_scores(epoch_results: dict, dest: str = None, headless: boo
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Process text file and plot EMA Pseudo Dice Scores')
-    parser.add_argument('--file', type=str, required=False, default="c:/Users/varda/Desktop/training_log.txt",
-                        help="The text file to process.")
-    parser.add_argument('--dest', type=str, default="PLOT.png",
-                        help="Optional: save the plot to a .png file")
+    parser.add_argument('--file', type=str, required=True,
+                        help="The path to the training log file of the nnUNet")
+    parser.add_argument('--dest', type=str, required=True,
+                        help="Destination where the plot needs to be saved")
     parser.add_argument("--headless", action="store_true",
                         help="Does not display the plot and save it directly (implies --dest to be provided.")
 
