@@ -81,7 +81,7 @@ class OutConv(nn.Module):
         return x
 
 ###################
-# SUNET
+# UNET+DR
 
 
 class Encoder_block(nn.Module):
@@ -117,8 +117,6 @@ class Encoder_block(nn.Module):
         # Max pooling
         pooled_output = self.maxpool(concat_output) # 2 x 2 
 
-        print('pooled', pooled_output.shape)
-
         return pooled_output # we need to double the second dimension, but how??? torch.Size([8, 32, 256, 256]) to  torch.Size([8, 64, 256, 256]) 
     
        
@@ -144,9 +142,9 @@ class Decoder_block(nn.Module):
             
 
     def forward(self, x1, x2):
-        print('input decoder', x1.shape) # input decoder torch.Size([8, 256, 16, 16])
+        # print('input decoder', x1.shape) # input decoder torch.Size([8, 256, 16, 16])
         x1 = self.up(x1)
-        print('upsample', x1.shape) # upsample torch.Size([8, 256, 32, 32])
+        # print('upsample', x1.shape) # upsample torch.Size([8, 256, 32, 32])
         # input is CHW
         diffY = x2.size()[2] - x1.size()[2]
         diffX = x2.size()[3] - x1.size()[3]
@@ -157,12 +155,12 @@ class Decoder_block(nn.Module):
         # https://github.com/HaiyongJiang/U-Net-Pytorch-Unstructured-Buggy/commit/0e854509c2cea854e247a9c615f175f76fbb2e3a
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
         x = torch.cat([x2, x1], dim=1)
-        print('cat', x.shape) # cat torch.Size([8, 512, 16, 16])
+        # print('cat', x.shape) # cat torch.Size([8, 512, 16, 16])
 
         x = self.first_conv(x)
-        print('conv', x.shape)
+        # print('conv', x.shape)
         x = self.second_conv(x)
-        print('output second', x.shape)
+        # print('output second', x.shape)
         
         return x
 
