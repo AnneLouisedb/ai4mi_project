@@ -61,9 +61,9 @@ class UNet(nn.Module): #(1, K) - one channel, K classes
                 self.apply(random_weights_init)
             
 
-class SUNet(nn.Module):  # (1, K) - one channel, K classes
+class UNetDR(nn.Module):  # (1, K) - one channel, K classes
     def __init__(self, n_channels, n_classes, bilinear=False):
-        super(SUNet, self).__init__()
+        super(UNetDR, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
