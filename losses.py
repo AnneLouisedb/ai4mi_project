@@ -156,7 +156,7 @@ class DiceLoss():
         return loss
 
 class TverskyLoss:
-    def __init__(self, alpha=0.5, beta=0.5, **kwargs):
+    def __init__(self, alpha=0.7, beta=0.3, **kwargs):
         """
         Initializes the TverskyLoss.
 
