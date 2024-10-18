@@ -237,7 +237,7 @@ def runTraining(args):
         loss_fn = lambda pred, target: ce_loss(pred, target) + dice_loss(pred, target)
     elif args.loss == 'generalised_dice':
         loss_fn = GeneralizedDice(idk=list(range(K)))
-    elif args.loss == 'TL':
+    elif args.loss == 'tversky':
       loss_fn = TverskyLoss(idk=list(range(K)))
     elif args.loss == 'multiclass_dice':
         loss_fn = MulticlassDice(idk=list(range(K)))
