@@ -51,7 +51,7 @@ from utils import (Dcm,
 from losses import (CrossEntropy, Weighted_CrossEntropy, MulticlassDice, GeneralizedDice, DiceLoss, TverskyLoss)
 
 # import Unet and nnUnet
-from UNet.unet_model import UNet, SUNet
+from UNet.unet_model import UNet, SUNet, UNetDR
 from VNet.vnet_model import VNet
 
 # Import denoising filters
@@ -73,6 +73,8 @@ def initialize_datasets_params(model_name: str) -> None:
         datasets_params["SEGTHOR"] = {'K': 5, 'net': VNet, 'B': 8}
     elif model_name == 'SUNet':
         datasets_params["SEGTHOR"] = {'K': 5, 'net': SUNet, 'B': 8}
+    elif model_name == 'UNetDR':
+        datasets_params["SEGTHOR"] = {'K': 5, 'net': UNetDR, 'B': 8}
     else:  # Assuming 'enet' or other models
         datasets_params["SEGTHOR"] = {'K': 5, 'net': ENet, 'B': 8}
     
@@ -134,31 +136,23 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
     print(f">> Picked {device} to run experiments")
 
     K: int = datasets_params[args.dataset]['K']
-    net = datasets_params[args.dataset]['net'](1, K)
-    net.init_weights()
-    net.to(device)
-    model = net
-
-    lr = 0.0005
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr, betas=(0.9, 0.999))
-
-    start_epoch = 0
-    best_dice = 0.0
 
     if args.resume:
-        # Load the checkpoint as a dictionary
-        checkpoint = torch.load(args.resume, map_location=device)
-        if isinstance(checkpoint, dict):
-            # Load model state_dict
-            model.load_state_dict(checkpoint['model_state_dict'])
-            # Load optimizer state_dict
-            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-            # Extract start_epoch and best_dice
-            start_epoch = checkpoint.get('epoch', 0) + 1
-            best_dice = checkpoint.get('best_dice', 0.0)
-            print(f">>> Loaded checkpoint from {args.resume} (Epoch {start_epoch-1}) with best_dice = {best_dice:.3f}")
-        else:
-            raise ValueError("Checkpoint is not a dictionary. Ensure that the checkpoint contains necessary keys.")
+        # Load the entire model object
+        model = torch.load(args.resume, map_location=device)
+        print(f">>> Loaded model from {args.resume}")
+    else:
+        # Initialize a new model
+        net = datasets_params[args.dataset]['net'](1, K, args.dropout_prob)
+        net.init_weights()
+        net.to(device)
+        model = net
+    
+    lr = args.lr
+    if args.optimizer == 'adamW':
+        optimizer = torch.optim.AdamW(model.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=0.01)
+    else:
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr, betas=(0.9, 0.999))
 
     # Dataset part
     B: int = datasets_params[args.dataset]['B']
@@ -190,7 +184,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
                              root_dir,
                              img_transform=img_transform,
                              gt_transform=gt_transform,
-                             custom_transform=apply_random_crop,
+                             #custom_transform=apply_random_crop,
                              debug=args.debug)
     
     train_loader = DataLoader(train_set,
@@ -237,10 +231,10 @@ def runTraining(args):
         loss_fn = lambda pred, target: ce_loss(pred, target) + dice_loss(pred, target)
     elif args.loss == 'generalised_dice':
         loss_fn = GeneralizedDice(idk=list(range(K)))
-    elif args.loss == 'tversky':
-      loss_fn = TverskyLoss(idk=list(range(K)))
     elif args.loss == 'multiclass_dice':
         loss_fn = MulticlassDice(idk=list(range(K)))
+    elif args.loss == 'tversky':
+        loss_fn = TverskyLoss(idk=list(range(K)))
 
     else:
         raise ValueError(f"Unsupported loss function: {args.loss}")
@@ -251,7 +245,10 @@ def runTraining(args):
     log_loss_val: Tensor = torch.zeros((args.epochs, len(val_loader)))
     log_dice_val: Tensor = torch.zeros((args.epochs, len(val_loader.dataset), K))
 
-    best_dice: float = 0
+    if args.resume:
+        best_dice = args.best_dice
+    else:
+        best_dice: float = 0
 
     for e in range(args.epochs):
         for m in ['train', 'val']:            
@@ -346,6 +343,8 @@ def main():
     parser.add_argument('--epochs', default=200, type=int)
     parser.add_argument('--dataset', choices=['SEGTHOR', 'TOY2'], required=True, help='Dataset name')
     parser.add_argument('--mode', default='full', choices=['partial', 'full', 'weighted'])
+    parser.add_argument('--optimizer', default= 'adam',choices=['adam', 'adamW'], help="Choose between the adam and adamW optimizer")
+    parser.add_argument('--lr', default= 0.0005, type=float, help="Choose your learning rate")
     parser.add_argument('--dest', type=Path, required=True,
                         help="Destination directory to save the results (predictions and weights).")
 
@@ -354,13 +353,15 @@ def main():
     parser.add_argument('--debug', action='store_true',
                         help="Keep only a fraction (10 samples) of the datasets, "
                              "to test the logic around epochs and logging easily.")
-    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, VNet, SUNet]" )
+    parser.add_argument('--model', default='enet', help="Which model to use? [ENet, UNet, VNet, SUNet, UNetDR]" )
     parser.add_argument('--filter', default= None, choices=['gaussian', 'median', 'non_local_means', 'bilateral', 'wavelet'], help="Filter to apply for preprocessing.")
-    parser.add_argument('--loss', default='Tversky', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice', 'tversky'],
-                    help="Loss function to use. CE: Cross Entropy, Dice: Dice Loss, DiceCE: Combined Dice and CE")
+    parser.add_argument('--loss', default='CE', choices=['CE', 'Dice', 'DiceCE', 'generalised_dice',  'multiclass_dice', 'tversky'],
+                    help="Loss function to use")
     parser.add_argument('--random_crop_h', default= 100, help="Height for random crop.")
     parser.add_argument('--random_crop_w', default= 100, help="Width for random crop.")
     parser.add_argument('--resume', type=Path, default=None, help="Path to a .pkl model to resume training from.")
+    parser.add_argument('--best_dice', type=float, default=0, help="Best dice value of old model, use only while using the resume arg")
+    parser.add_argument('--dropout_prob', type=float, default=0.2)
 
     args = parser.parse_args()
 
