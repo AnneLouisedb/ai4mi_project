@@ -30,6 +30,22 @@ $ TOD
 
 ```
 #### Multi-phase training
+Example of multi-phase training, loading a model trained on *cross entropy* and further training on the *tversky loss*
+```
+$ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'SUNet' --loss 'tversky' --resume 'model/ce_model.pkl'
+
+```
+
+| Parameter | Description |
+|-----------|-------------|
+| `--dest results/...` | Defines the output directory for results |
+| `--gpu` | Enables GPU acceleration |
+| `--model 'SUNet'` | Specifies the model architecture |
+| `--loss 'tversky'` | Sets Tversky loss for the fine-tuning phase |
+| `--resume 'model/ce_model.pkl'` | Path to the pre-trained model (trained with cross-entropy) |
+
+---------
+
 
 ### nnU-Net Training
 Before training make sure to run 'jobs/nnUNet-Setup.job'. 
