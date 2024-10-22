@@ -14,7 +14,8 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ### U-Net
  TO DO IMAMGE
 ## Pre-processing
-
+### Heart label transformation
+TO DO
 ## Training
 
 ### Regular Training
