@@ -37,7 +37,8 @@ $ TOD
 ```
 ### Loss functions
 
-## Visuals
+## Visuals - patient 16
+#### nnU-Net+DR
 ![nnunetDR](images/nnunet+DR.jpeg)
 
 ## Metrics Computation 
