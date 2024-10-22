@@ -166,6 +166,8 @@ ensuring higher quality in the segmentation output.
 ## Evaluation Metrics
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
 
+## Results
+
 ### Results on internal validation set (DSC)
 
 | Model    | Loss | Esophagus | Heart     | Trachea   | Aorta     |
@@ -184,6 +186,40 @@ TO DO; link to file with HD95 computation and DSC (VARDAN?)
 | U-Net+DR | ce   | 0.805     | 0.882     | **0.945** | *0.922*   |
 | U-Net+DR | dlce | 0.811     | 0.891     | 0.909     | 0.918     |
 | 2D V-Net | ce   | 0.723     | 0.879     | 0.935     | 0.827     |
+
+**Table 1**: Segmentation results for various models, measured by the
+Dice Similarity Coefficient (DSC) (%) on a hidden validation set.
+The table shows the DSC taken from the best epoch. Loss func-
+tions used are cross-entropy (ce), dice loss (dl) and weighted cross-
+entropy (wce). For each organ, **best** and *second best* are marked.
+
+
+### Results for Best performing models
+
+|           | U-Net     | U-Net | sU-Net    | sU-Net | U-Net+DR  | U-Net+DR | E-Net | E-Net  |
+|-----------|-----------|-------|-----------|--------|-----------|----------|-------|--------|
+| Loss      | wce       | wce   | dcle      | dcle   | ce        | ce       | ce    | ce     |
+| Metric    | DSC       | HD95  | DSC       | HD95   | DSC       | HD95     | DSC   | HD95   |
+| Esophagus | 0.770     | to do | **0.819** | 7.439  | 0.805     | 9.380    | 0.704 | 9.609  |
+| Heart     | **0.951** | to do | 0.916     | 11.418 | 0.882     | 19.400   | 0.933 | 14.076 |
+| Trachea   | 0.942     | to do | _0.944_   | 8.070  | **0.945** | 9.961    | 0.908 | 8.600  |
+| Aorta     | 0.873     | to do | **0.923** | 5.610  | _0.922_   | 9.053    | 0.841 | 11.451 |
+
+**Table 2**: Segmentation results for our best performing models. DSC
+and HD95 metrics are reported. For each organ, **best** and *second best*
+are marked.
+
+### nnU-Net based performance metrics [TO DO MARK BEST AND SECOND BEST]
+|           | (1) 2D U-Net d.s. | | (2) 2D U-Net | | (3) sU-Net | | (3) U-Net+DR  | | 
+|-----------|-----------|-------|-----------|--------|-----------|----------|-------|--------|
+| Metric    | DSC       | HD95  | DSC       | HD95   | DSC       | HD95     | DSC   | HD95   |
+| Esophagus | 0.828     | to do | 0.833     | to do  | 0.775     | to do    | 0.814 | to do  |
+| Heart     | 0.931     | to do | 0.937     | to do  | 0.917     | to do    | 0.941 | to do  |
+| Trachea   | 0.904     | to do | 0.898     | to do  | 0.892     | to do    | 0.920 | to do  |
+| Aorta     | 0.936     | to do | 0.909     | to do  | 0.928     | to do    | 0.930 | to do  |
+
+**Table 3**: nnU-Net based performance metrics, **d.s.** denotes "deep supervision"; absence implies no deep supervision. Training parameters are detailed in Section Model Training.
+
 
 ### Results on test set
 
