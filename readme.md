@@ -20,7 +20,7 @@ This is implemented as `DiceLoss()` in the project. In this implementation,
 the intersection between the predicted and target regions is computed, 
 and the loss is calculated as:
 
-$ L_{dsc}(y, \hat{y}) = 1 - DSC = 1 - \frac{ 2 \sum_n y_{nk}\hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
+$L_{dsc}(y, \hat{y}) = 1 - DSC = 1 - \frac{ 2 \sum_n y_{nk}\hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
 
 ### (Weighted) Cross Entropy
 Cross Entropy Loss is widely used for pixel-wise classification tasks. In the project, it is implemented as `CrossEntropy()` and its weighted version as `Weighted_CrossEntropy()`, where class weights are adjusted to handle class imbalances. The standard Cross Entropy loss is calculated as:
