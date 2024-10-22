@@ -29,10 +29,14 @@ $ TODO
 $ TOD
 
 ```
+#### Multi-phase training
+
 ### nnU-Net Training
 ```
-$ TODO
-$ TOD
+$ nnUNetv2_train 1 2d 1
+$ nnUNetv2_train 1 3d_fullres 1
+$ nnUNetv2_train 1 3d_lowres 1
+
 
 ```
 ### Loss functions
