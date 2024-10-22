@@ -1,5 +1,6 @@
-# AI for medical imaging — Fall 2024 University of Amsterdam 
-By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
+# AI for medical imaging — Semantic Segmentation for Organs at Risk
+ **University of Amsterdam**
+ By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
 
 ## Project overview
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
