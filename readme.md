@@ -7,14 +7,26 @@
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 
 ## Model Architectures
+
+### E-Net
+![U-Net+DR architecture,](images/ENet-architecture.png)
+C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).
+
+### U-Net
+![U-Net architecture](images/u-net-architecture.png)
+ O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597) 
+
+### 2D V-Net
+![U-Net architecture](images/VNet_architecture.png)
+ D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
+
 ### sU-Net
 ![sU-Net architecture](images/sU-Net.png)
+
 ### U-Net+DR
 ![U-Net+DR architecture,](images/UNet+DR_architecture.png)
-### E-Net
-TO DO
-### U-Net
- ![U-Net architecture](images/u-net-architecture.png)
+
+
 ## Pre-processing
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
