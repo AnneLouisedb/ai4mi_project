@@ -52,7 +52,7 @@ $ nnUNetv2_train 1 3d_lowres 1
 ## Metrics Computation 
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
 
-### Results on internal validation set
+### Results on internal validation set (DSC)
 
 | Model    | Loss | Esophagus | Heart     | Trachea   | Aorta     |
 |----------|------|-----------|-----------|-----------|-----------|
