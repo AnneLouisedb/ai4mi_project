@@ -51,6 +51,10 @@ $ nnUNetv2_train 1 3d_lowres 1
 
 ## Metrics Computation 
 
+### Results on internal validation set
+### Results on test set
+TO DO: visuals
+
 ## TO DO
 
 [] how to run training description
