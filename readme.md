@@ -41,7 +41,7 @@ $ TOD
 | `--num_workers` | 5 | - | Number of worker processes |
 | `--gpu` | False | - | Enable GPU usage (flag) |
 | `--debug` | False | - | Run in debug mode with reduced dataset (flag) |
-| `--model` | enet | - | Model architecture to use |
+| `--model` | enet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
 | `--filter` | None | gaussian, median, non_local_means, bilateral, wavelet | Preprocessing filter |
 | `--loss` | CE | CE, Dice, DiceCE, generalised_dice, multiclass_dice, tversky | Loss function |
 | `--random_crop_h` | 100 | - | Height for random crop |
