@@ -50,6 +50,7 @@ $ nnUNetv2_train 1 3d_lowres 1
 ![nnunetDR](images/nnunet+DR.jpeg)
 
 ## Metrics Computation 
+TO DO; link to file with HD95 computation and DSC (VARDAN?)
 
 ### Results on internal validation set
 
@@ -69,6 +70,7 @@ $ nnUNetv2_train 1 3d_lowres 1
 | U-Net+DR | ce   | 0.805     | 0.882     | **0.945** | *0.922*   |
 | U-Net+DR | dlce | 0.811     | 0.891     | 0.909     | 0.918     |
 | 2D V-Net | ce   | 0.723     | 0.879     | 0.935     | 0.827     |
+
 ### Results on test set
 TO DO: visuals
 
