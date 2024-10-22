@@ -6,6 +6,9 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 
 ## Pre-processing
 
+## Training
+
+## Metrics Computation 
 
 ## TO DO
 
