@@ -29,6 +29,27 @@ $ TODO
 $ TOD
 
 ```
+
+| Argument | Default | Choices | Description |
+|----------|---------|---------|-------------|
+| `--epochs` | 200 | - | Number of training epochs |
+| `--dataset` | - | SEGTHOR, TOY2 | Dataset name (required) |
+| `--mode` | full | partial, full, weighted | Training mode |
+| `--optimizer` | adam | adam, adamW | Optimizer choice |
+| `--lr` | 0.0005 | - | Learning rate |
+| `--dest` | - | - | Destination directory for results (required) |
+| `--num_workers` | 5 | - | Number of worker processes |
+| `--gpu` | False | - | Enable GPU usage (flag) |
+| `--debug` | False | - | Run in debug mode with reduced dataset (flag) |
+| `--model` | enet | - | Model architecture to use |
+| `--filter` | None | gaussian, median, non_local_means, bilateral, wavelet | Preprocessing filter |
+| `--loss` | CE | CE, Dice, DiceCE, generalised_dice, multiclass_dice, tversky | Loss function |
+| `--random_crop_h` | 100 | - | Height for random crop |
+| `--random_crop_w` | 100 | - | Width for random crop |
+| `--resume` | None | - | Path to model for resuming training |
+| `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
+| `--dropout_prob` | 0.2 | - | Dropout probability |
+
 #### Multi-phase training
 Example of multi-phase training, loading a model trained on *cross entropy* and further training on the *tversky loss*
 ```
