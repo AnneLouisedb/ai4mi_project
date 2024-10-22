@@ -32,6 +32,7 @@ $ TOD
 #### Multi-phase training
 
 ### nnU-Net Training
+First run the jobs/nnUNet-Setup.job. 
 ```
 # Training XXX inside thennU-Net pipeline
 $ nnUNetv2_train 1 2d 1
