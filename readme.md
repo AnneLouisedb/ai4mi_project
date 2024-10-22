@@ -33,8 +33,9 @@ $ TOD
 
 ### nnU-Net Training
 ```
-# Training XXX inside the nnU-Net pipeline
+# Training XXX inside thennU-Net pipeline
 $ nnUNetv2_train 1 2d 1
+
 # Training XXX inside the nnU-Net pipeline
 $ nnUNetv2_train 1 3d_fullres 1
 $ nnUNetv2_train 1 3d_lowres 1
