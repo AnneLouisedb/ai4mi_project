@@ -162,6 +162,7 @@ Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconn
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
+![Alt text](images/sunet.gif)
 
 ## Evaluation Metrics
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
