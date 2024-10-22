@@ -16,6 +16,8 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ## Pre-processing
 ### Heart label transformation
 TO DO
+### Gaussian Smoothing
+### Median Filtering
 ## Training
 
 ### Regular Training
