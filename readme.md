@@ -5,62 +5,28 @@
 
 ## Project overview
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
+[TO DO LO]
 
 ## Dataset 
+[TO DO LO]
+
+## Loss functions
+The following loss functions are implemented in our project, and employed in losses.py:
+
+### Dice Loss
+Dice Loss focuses on the overlap between the predicted and ground truth regions, 
+ensuring small regions of interest are not overwhelmed by the background class. 
+This is implemented as `DiceLoss()` in the project. In this implementation, 
+the intersection between the predicted and target regions is computed, 
+and the loss is calculated as:
+$L_{dsc}(y, \hat{y}) = 1 - \frac{2 \sum_n y_{nk}\hat{y}{nk}}{\sum_n y{nk} + \sum_n \hat{y}_{nk}}$
+
+### (Weighted) Cross Entropy
 
 
-## Model Architectures
-
-### E-Net
-![E-Net](images/ENet-architecture.png)
-
-C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).
-
-### Standard U-Net
-![U-Net architecture](images/u-net-architecture.png)
-
-O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
-
-### nnU-Net
-![nnU-Net architecture](images/nn-Unet_architecture.png)
-
-F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
-
-### sU-Net
-![sU-Net architecture](images/sU-Net.png)
-
-Our modified shallow, sU-Net architecture inspired by Lambert et al. (2020). Graph
-shows 2D convolutions with ReLU activation + Batch normalisation, residual
-concatenations, and max pooling layers. Decoder blocks feature a bilinear
-upsampling layer. The network ends with a softmax layer.
-
-### U-Net+DR
-![U-Net+DR architecture,](images/UNet+DR_architecture.png)
-
-Our modified 2D U-Net+DR architecture, based on Vesal et al. (2019). Graph shows
-2D convolutions with ReLU activation + Batch normalisation, residual con-
-catenations, and max pooling. Decoder blocks feature a bilinear upsampling
-layer. The dilated bottleneck employs dilated 2D convolutions for enhanced
-feature extraction. The network ends with a softmax layer.
-
-### 2D V-Net
-![U-Net architecture](images/VNet_architecture.png)
-
-D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
 
 
-## Pre-processing
-The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
-
-### Heart label transformation
-TO DO
-
-### Gaussian Smoothing
-
-### Median Filtering
-
-## Training
-
+## Model Training
 ### Regular Training
 ```
 $ TODO
@@ -114,18 +80,71 @@ $ nnUNetv2_train 1 2d 1
 # Training XXX inside the nnU-Net pipeline
 $ nnUNetv2_train 1 3d_fullres 1
 $ nnUNetv2_train 1 3d_lowres 1
-
-
 ```
-### Loss functions
+## Pre-processing
+The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
+
+### Heart label transformation
+TO DO
+
+### Gaussian Smoothing
+
+### Median Filtering
+
+## Model Architectures
+### E-Net
+![E-Net](images/ENet-architecture.png)
+
+C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).
+
+### Standard U-Net
+![U-Net architecture](images/u-net-architecture.png)
+
+O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
+
+### nnU-Net
+![nnU-Net architecture](images/nn-Unet_architecture.png)
+
+F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
+
+### sU-Net
+![sU-Net architecture](images/sU-Net.png)
+
+Our modified shallow, sU-Net architecture inspired by Lambert et al. (2020). Graph
+shows 2D convolutions with ReLU activation + Batch normalisation, residual
+concatenations, and max pooling layers. Decoder blocks feature a bilinear
+upsampling layer. The network ends with a softmax layer.
+
+### U-Net+DR
+![U-Net+DR architecture,](images/UNet+DR_architecture.png)
+
+Our modified 2D U-Net+DR architecture, based on Vesal et al. (2019). Graph shows
+2D convolutions with ReLU activation + Batch normalisation, residual con-
+catenations, and max pooling. Decoder blocks feature a bilinear upsampling
+layer. The dilated bottleneck employs dilated 2D convolutions for enhanced
+feature extraction. The network ends with a softmax layer.
+
+### 2D V-Net
+![U-Net architecture](images/VNet_architecture.png)
+
+D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
+
 
 ## Visuals - patient 16
 | Ground Truth | U-Net CE | U-Net DR | nnU-Net DR |
 |--------------|---------------------|-------------------------------|----------------------------------|
 | ![Ground Truth](images/GT.jpeg) | ![U-Net CE](images/unet_ce.jpeg) | ![U-Net DR](images/unet+dr.jpeg) | ![nnU-Net DR](images/nnunet+DR.jpeg) |
 
+In the figure above, the segmentation results for patient 16 across various models are being
+compared: Ground Truth, U-Net CE, U-Net DR, and nnU-Net DR. 
 
-## Metrics Computation 
+The nnU-Net segmentation showcases a significant improvement, due to its incorporated pre- and post-processing steps. 
+Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
+By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
+ensuring higher quality in the segmentation output.
+
+
+## Evaluation Metrics
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
 
 ### Results on internal validation set (DSC)
@@ -148,6 +167,8 @@ TO DO; link to file with HD95 computation and DSC (VARDAN?)
 | 2D V-Net | ce   | 0.723     | 0.879     | 0.935     | 0.827     |
 
 ### Results on test set
+
+
 ## TO DO
 
 [] how to run training description
