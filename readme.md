@@ -12,7 +12,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ### U-Net+DR
  TO DO IMAMGE
 ### U-Net
- TO DO IMAMGE
+ ![sU-Net architecture](images/u-net-architecture.png)
 ## Pre-processing
 ### Heart label transformation
 TO DO
