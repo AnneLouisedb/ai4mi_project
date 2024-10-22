@@ -14,6 +14,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ### U-Net
  ![sU-Net architecture](images/u-net-architecture.png)
 ## Pre-processing
+The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 ### Heart label transformation
 TO DO
 ### Gaussian Smoothing
