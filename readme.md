@@ -11,6 +11,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 [TO DO LO]
 
 ## Loss functions
+All loss functions are implemented in the [losses.py](losses.py) file and can be selected within the [main.py](main.py) file in the `runTraining` function. The available loss functions can be chosen through the `--loss` argument when running the training process.
 The following loss functions are implemented in our project, and employed in [losses.py](losses.py):
 
 ### Dice Loss
@@ -30,14 +31,14 @@ $L_{CE}(y, \hat{y}) = -\frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{C} w_c * y_{i,c} \
 In the weighted version, the weights \( w_c \) are inversely proportional to the class frequencies.
 
 ### Tversky Loss 
-Tversky Loss is used to provide a flexible balance between false positives and false negatives. It is implemented as `TverskyLoss()` and allows control over the trade-off using parameters \(\alpha\) and \(\beta\):
+Tversky Loss is used to provide a flexible balance between false positives and false negatives. It is implemented as `TverskyLoss()` and allows control over the trade-off using parameters $\alpha$ and $\beta$:
 
 $L_{tl}(y,\hat{y} ) = 1 - \frac{ \overbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}^{TP} }{ \underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{TP} + \alpha\underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{FN}  + \beta \underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{FP}}$
 
 This allows for adjusting the weight of false positives (FP) and false negatives (FN), which is crucial in medical segmentation tasks where some types of errors are more critical than others.
 
 ### Combined Loss
-In highly unbalanced segmentation tasks, compound losses can balance the overall class distribution while paying attention to smaller and challenging structures. We employ a combined loss, Dice Loss and Cross-Entropy Loss (`dlce`), to leverage the strengths of both region-based and distribution-based metrics:
+In highly unbalanced segmentation tasks, compound losses can balance the overall class distribution while paying attention to smaller and challenging structures. The combined loss, which adds the Dice Loss and Cross Entropy Loss, is implemented in the `runTraining` function in [main.py](main.py)as the option `"DiceCE"`. This combined loss is designed to leverage both the strengths of region-based overlap (Dice Loss) and pixel-wise classification (Cross Entropy). The function sums the results of the two losses:
 
 $L_{dlce} = L_{dsc} + L_{ce}$
 
