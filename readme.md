@@ -1,5 +1,6 @@
 # AI for medical imaging — Semantic Segmentation for Organs at Risk
  **University of Amsterdam**
+
  By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
 
 ## Project overview
