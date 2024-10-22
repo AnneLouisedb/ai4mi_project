@@ -15,18 +15,21 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
  TO DO IMAMGE
 ## Pre-processing
 
-## Regular Training
+## Training
+
+### Regular Training
 ```
 $ TODO
 $ TOD
 
 ```
-## nnU-Net Training
+### nnU-Net Training
 ```
 $ TODO
 $ TOD
 
 ```
+### Loss functions
 
 ## Metrics Computation 
 
