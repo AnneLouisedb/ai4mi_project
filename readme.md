@@ -4,13 +4,21 @@
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 ![Segthor Overview](segthor_overview.png)
 ## TO DO
+
 [] pre-processing
+
 [] how to run training description
+
 [] inference?
+
 [] metrics computation 
+
 [] affine script fixing
+
 [] storing the best saved model
+
 [] predictions on internal validation set, labels of validations set 
+
 [] metrics computed (Need to be 3d?)
 
 ## Codebase features
