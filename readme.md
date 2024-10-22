@@ -12,7 +12,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 
 ## Loss functions
 All loss functions are implemented in the [losses.py](losses.py) file and can be selected within the [main.py](main.py) file in the `runTraining` function. The available loss functions can be chosen through the `--loss` argument when running the training process.
-The following loss functions are implemented in our project, and employed in [losses.py](losses.py):
+The following loss functions are implemented in our project:
 
 ### Dice Loss
 Dice Loss focuses on the overlap between the predicted and ground truth regions, 
@@ -21,7 +21,7 @@ This is implemented as `DiceLoss()` in the project. In this implementation,
 the intersection between the predicted and target regions is computed, 
 and the loss is calculated as:
 
-$L_{dsc}(y, \hat{y}) = 1 - DSC = 1 - \frac{ 2 \sum_n y_{nk}\hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
+$L_{dsc}(y, \hat{y}) = 1 - \frac{2 \sum_n y_{nk} \hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
 
 ### (Weighted) Cross Entropy
 Cross Entropy Loss is widely used for pixel-wise classification tasks. In the project, it is implemented as `CrossEntropy()` and its weighted version as `Weighted_CrossEntropy()`, where class weights are adjusted to handle class imbalances. The standard Cross Entropy loss is calculated as:
@@ -33,7 +33,7 @@ In the weighted version, the weights \( w_c \) are inversely proportional to the
 ### Tversky Loss 
 Tversky Loss is used to provide a flexible balance between false positives and false negatives. It is implemented as `TverskyLoss()` and allows control over the trade-off using parameters $\alpha$ and $\beta$:
 
-$L_{tl}(y,\hat{y} ) = 1 - \frac{ \overbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}^{TP} }{ \underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{TP} + \alpha\underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{FN}  + \beta \underbrace{\sum_{k=1}^N y_{nk}\hat{y}_{nk}}_{FP}}$
+$$L_{tl}(y,\hat{y}) = 1 - \frac{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} }{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} + \alpha \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} + \beta \sum_{k=1}^{N} y_{nk}\hat{y}_{nk}}$$
 
 This allows for adjusting the weight of false positives (FP) and false negatives (FN), which is crucial in medical segmentation tasks where some types of errors are more critical than others.
 
