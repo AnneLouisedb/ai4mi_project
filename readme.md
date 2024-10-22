@@ -82,8 +82,10 @@ $ nnUNetv2_train 1 3d_lowres 1
 ### Loss functions
 
 ## Visuals - patient 16
-#### nnU-Net+DR
-![nnunetDR](images/nnunet+DR.jpeg)
+| Ground Truth | U-Net CE | U-Net DR | nnU-Net DR |
+|--------------|---------------------|-------------------------------|----------------------------------|
+| ![Ground Truth](images/GT.jpeg) | ![U-Net CE](images/unet_ce.jpeg) | ![U-Net DR](images/unet+dr.jpeg) | ![nnU-Net DR](images/nnunet+DR.jpeg) |
+
 
 ## Metrics Computation 
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
@@ -108,8 +110,6 @@ TO DO; link to file with HD95 computation and DSC (VARDAN?)
 | 2D V-Net | ce   | 0.723     | 0.879     | 0.935     | 0.827     |
 
 ### Results on test set
-TO DO: visuals
-
 ## TO DO
 
 [] how to run training description
