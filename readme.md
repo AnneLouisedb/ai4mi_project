@@ -11,6 +11,8 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ![sU-Net architecture](images/sU-Net.png)
 ### U-Net+DR
  TO DO IMAMGE
+### E-Net
+TO DO
 ### U-Net
  ![sU-Net architecture](images/u-net-architecture.png)
 ## Pre-processing
