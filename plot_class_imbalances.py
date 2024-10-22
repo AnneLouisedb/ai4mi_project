@@ -1,9 +1,3 @@
-# plotting the class imbalances
-
-
-# output file class_imbalances.py
-# source folder with ground truths (images contain 5 labels): --source_scan_pattern 
-
 import SimpleITK as sitk
 import numpy as np
 import matplotlib.pyplot as plt
