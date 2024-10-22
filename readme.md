@@ -1,4 +1,4 @@
-# AI for medical imaging — Semantic Segmentation for Organs at Risk
+# AI for Medical Imaging — Semantic Segmentation for Organs at Risk
  **University of Amsterdam**
 
  By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
@@ -12,14 +12,14 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 ## Model Architectures
 
 ### E-Net
-![U-Net+DR architecture,](images/ENet-architecture.png)
+![E-Net](images/ENet-architecture.png)
 
 C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).
 
 ### Standard U-Net
 ![U-Net architecture](images/u-net-architecture.png)
 
- O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
+O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
 
 ### nnU-Net
 ![nnU-Net architecture](images/nn-Unet_architecture.png)
@@ -29,13 +29,24 @@ F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU
 ### sU-Net
 ![sU-Net architecture](images/sU-Net.png)
 
+Our modified shallow, sU-Net architecture inspired by Lambert et al. (2020). Graph
+shows 2D convolutions with ReLU activation + Batch normalisation, residual
+concatenations, and max pooling layers. Decoder blocks feature a bilinear
+upsampling layer. The network ends with a softmax layer.
+
 ### U-Net+DR
 ![U-Net+DR architecture,](images/UNet+DR_architecture.png)
+
+Our modified 2D U-Net+DR architecture, based on Vesal et al. (2019). Graph shows
+2D convolutions with ReLU activation + Batch normalisation, residual con-
+catenations, and max pooling. Decoder blocks feature a bilinear upsampling
+layer. The dilated bottleneck employs dilated 2D convolutions for enhanced
+feature extraction. The network ends with a softmax layer.
 
 ### 2D V-Net
 ![U-Net architecture](images/VNet_architecture.png)
 
- D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
+D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
 
 
 ## Pre-processing
