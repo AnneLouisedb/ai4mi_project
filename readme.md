@@ -3,6 +3,15 @@
 ## Project overview
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 ![Segthor Overview](segthor_overview.png)
+## TO DO
+[] pre-processing
+[] how to run training description
+[] inference?
+[] metrics computation 
+[] affine script fixing
+[] storing the best saved model
+[] predictions on internal validation set, labels of validations set 
+[] metrics computed (Need to be 3d?)
 
 ## Codebase features
 This codebase is given as a starting point, to provide an initial neural network that converges during training. (For broader context, this is itself a fork of an [older conference tutorial](https://github.com/LIVIAETS/miccai_weakly_supervised_tutorial) we gave few years ago.) It also provides facilities to locally run some test on a laptop, with a toy dataset and dummy network.
