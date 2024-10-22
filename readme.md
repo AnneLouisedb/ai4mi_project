@@ -83,7 +83,7 @@ $ mv data/SEGTHOR_tmp data/SEGTHOR
 
 ### Viewing the data
 The data can be viewed in different ways:
-- looking directly at the `.png` in the sliced folder (`data/SEGTHOR`);
+- looking directly at the `.` in the sliced folder (`data/SEGTHOR`);
 - using the provided "viewer" to compare segmentations ([see below](#viewing-the-results));
 - opening the Nifti files from `data/segthor_train` with [3D Slicer](https://www.slicer.org/) or [ITK Snap](http://www.itksnap.org).
 
@@ -117,7 +117,7 @@ $ python viewer/viewer.py --img_source data/TOY2/val/img \
     data/TOY2/val/gt results/toy2/ce/iter000/val results/toy2/ce/iter005/val results/toy2/ce/best_epoch/val \
     --show_img -C 256 --no_contour
 ```
-![Example of the viewer on the TOY example](viewer_toy.png)
+![Example of the viewer on the TOY example](images/viewer_toy.png)
 **Note:** if using it from a SSH session, it requires X to be forwarded ([Unix/BSD](https://man.archlinux.org/man/ssh.1#X), [Windows](https://mobaxterm.mobatek.net/documentation.html#1_4)) for it to work. Note that X forwarding also needs to be enabled on the server side.
 
 
@@ -127,7 +127,7 @@ $ python viewer/viewer.py --img_source data/SEGTHOR/val/img \
     -n 2 -C 5 --remap "{63: 1, 126: 2, 189: 3, 252: 4}" \
     --legend --class_names background esophagus heart trachea aorta
 ```
-![Example of the viewer on SegTHOR](viewer_segthor.png)
+![Example of the viewer on SegTHOR](images/viewer_segthor.png)
 
 #### 3D viewers
 To look at the results in 3D, it is necessary to reconstruct the 3D volume from the individual 2D predictions saved as images.
@@ -143,7 +143,7 @@ $ python stitch.py --data_folder results/segthor/ce/best_epoch/val \
 ![Viewing label and prediction](3dslicer.png)
 
 Zooming on the prediction with smoothing disabled:
-![Viewing the prediction without smoothing](3dslicer_zoom.png)
+![Viewing the prediction without smoothing](images/3dslicer_zoom.png)
 
 
 ### Plotting the metrics
@@ -163,7 +163,7 @@ options:
   --headless            Does not display the plot and save it directly (implies --dest to be provided.
 $ python plot.py --metric_file results/segthor/ce/dice_val.npy --dest results/segthor/ce/dice_val.png
 ```
-![Validation DSC](dice_val.png)
+![Validation DSC](images/dice_val.png)
 
 Plotting and visualization ressources:
 * [Scientific visualization Python + Matplotlib](https://github.com/rougier/scientific-visualization-book)
