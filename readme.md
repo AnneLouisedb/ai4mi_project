@@ -2,10 +2,12 @@
 
 ## Project overview
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
-![Segthor Overview](segthor_overview.png)
-## TO DO
 
-[] pre-processing
+
+## Pre-processing
+
+
+## TO DO
 
 [] how to run training description
 
