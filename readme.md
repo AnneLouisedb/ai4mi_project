@@ -37,6 +37,9 @@ $ TOD
 ```
 ### Loss functions
 
+## Visuals
+![nnunetDR](images/nnunet+DR.jpeg)
+
 ## Metrics Computation 
 
 ## TO DO
