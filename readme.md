@@ -66,6 +66,24 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
 | `--dropout_prob` | 0.2 | - | Dropout probability |
 
+---------
+
+### Generate volumes of predictions
+```bash
+python stitch.py --data_folder results/segthor/SUNet_Hyb_CE/ce/best_epoch/val --dest_folder volumes/segthor/SUNet_Hyb_CE/ce --num_classes 255 --grp_regex "(Patient_\d\d)_\d\d\d\d" --source_scan_pattern "data/segthor_train/train/{id_}/GT.nii.gz"
+```
+
+### Plot the dice score over epochs
+```bash
+python plot.py --metric_file results/segthor/SUNet_Hyb_CE/ce/dice_val.npy --dest results/segthor/SUNet_Hyb_CE/ce/dice_val.png
+```
+
+#### Plot the HD/HD95 plots
+```bash
+python evaluation.py --model 'SUNet' --base_folder 'SUNet_Hyb_CE'
+```
+---------
+
 #### Multi-phase training
 Example of multi-phase training, loading a model trained on *cross entropy* and further training on the *tversky loss*
 ```
@@ -153,6 +171,9 @@ python plot_dice_nnUNet --file '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_resul
 /home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results
 ```
 There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job
+
+---------
+
 ## Pre-Processing
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
