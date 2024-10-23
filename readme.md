@@ -222,7 +222,7 @@ are marked.
 
 |Patient|E-Net (Baseline) | U-Net CE | U-Net DR | sUnet|
 |--------------|--------------|---------------------|-------------------------------|----------------------------------|
-|Patient 41 | ![enet](images/enet_41.gif) | ![U-Net CE](images/unet_41.gif) | ![U-Net DR](images/unetdr_41.gif) | ![sunet41](images/sunet_41.gif) |
+|Patient 41 | ![enet](images/Enet_41.gif) | ![U-Net CE](images/unet_41.gif) | ![U-Net DR](images/unetdr_41.gif) | ![sunet41](images/sunet_41.gif) |
 |Patient 42| ![enet](images/enet_42.gif) | ![U-Net CE](images/unet_42.gif) | ![U-Net DR](images/unetdr_42.gif) | ![sunet41](images/sunet_42.gif) |
 
 
