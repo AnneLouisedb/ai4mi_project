@@ -218,7 +218,7 @@ are marked.
 
 ### Results on test set
 
-#### Patient 41
+
 
 |Patient|E-Net (Baseline) | U-Net CE | U-Net DR | sUnet|
 |--------------|--------------|---------------------|-------------------------------|----------------------------------|
@@ -227,6 +227,10 @@ are marked.
 
 
 
+| Patient   | E-Net (Baseline) | U-Net CE | U-Net DR | sUnet |
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
 
 ## TO DO
