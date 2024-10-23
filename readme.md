@@ -17,9 +17,7 @@ The following loss functions are implemented in our project:
 ### Dice Loss
 Dice Loss focuses on the overlap between the predicted and ground truth regions, 
 ensuring small regions of interest are not overwhelmed by the background class. 
-This is implemented as `DiceLoss()` in the project. In this implementation, 
-the intersection between the predicted and target regions is computed, 
-and the loss is calculated as:
+This is implemented as `DiceLoss()` in the project. 
 
 $L_{dsc}(y, \hat{y}) = 1 - \frac{2 \sum_n y_{nk} \hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
 
