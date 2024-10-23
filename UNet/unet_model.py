@@ -16,7 +16,9 @@ class UNet(nn.Module): #(1, K) - one channel, K classes
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
-
+        self.decoder = nn.Identity()  # Placeholder
+        self.deep_supervision = False #deep_supervision
+        
         self.inc = (DoubleConv(n_channels, 64))
         self.down1 = (Down(64, 128))
         self.down2 = (Down(128, 256))
@@ -168,34 +170,50 @@ class UNetDR(nn.Module):  # (1, K) - one channel, K classes
 # Shallow UNet
 
 class SUNet(nn.Module): #(1, K) - one channel, K classes
-    def __init__(self, n_channels, n_classes, bilinear=False):
+    def __init__(self, n_channels, n_classes, dropout_prob):
         super(SUNet, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
-        self.bilinear = bilinear
+        # self.bilinear = bilinear
+        self.decoder = nn.Identity()  # Placeholder
+        self.deep_supervision = False #deep_supervision
         
         self.inc = (DoubleConv(n_channels, 64)) # first layer
-        self.down1 = (Down(64, 128)) # second layer
-        self.down2 = (Down(128, 256)) # third laywer
-        self.down3 = (Down(256, 512)) # fourth fourth layer - ensure the same size in the max pooling
-        factor = 2 if bilinear else 1
+        self.down1 = (Down(64, 128, dropout_prob=dropout_prob)) # second layer
+        self.down2 = (Down(128, 256,dropout_prob= dropout_prob)) # third laywer
+
+        factor = 2 
+     
+        self.down3 = (Down(256, 512 // factor, dropout_prob=dropout_prob)) # fourth fourth layer - ensure the same size in the max pooling
       
-        self.up1 = (Up(512, 256  // factor, bilinear))
-        self.up2 = (Up(256, 128 // factor, bilinear))
-        self.up3 = (Up(128, 64 , bilinear))
-        self.outc = (OutConv(64, n_classes))
-
-
+       
+        self.up1 = (UpS(512, 256  // factor, dropout_prob)) #  [256, 512, 3, 3], expected input[8, 768, 64, 64] to have 512 channels, but got 768 channels instead
+     
+        self.up2 = (UpS(256, 128 // factor,  dropout_prob))
         
+        self.up3 = (UpS(128, 64 ,  dropout_prob))
+       
+        self.outc = (OutConv(64, n_classes))
+      
+
+
     def forward(self, x):
         x1 = self.inc(x)
+      
         x2 = self.down1(x1)
+       
         x3 = self.down2(x2)
+        
         x4 = self.down3(x3)
+       
         x = self.up1(x4, x3)
+        
         x = self.up2(x, x2)
+    
         x = self.up3(x, x1)
+        
         logits = self.outc(x)
+        
         return logits
 
     def use_checkpointing(self):
