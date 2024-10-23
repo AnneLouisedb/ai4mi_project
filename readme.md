@@ -191,10 +191,11 @@ O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Bi
 ![nnU-Net architecture](images/nn-Unet_architecture.png)
 
 F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
-##### Dataset Fingerprint
+##### Segthor Dataset Fingerprint
 - (1)
 - (2)
 - (3)
+- (4) Image modality 
 
 ### sU-Net
 ![sU-Net architecture](images/sU-Net.png)
