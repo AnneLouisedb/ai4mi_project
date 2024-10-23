@@ -252,38 +252,38 @@ def runTesting(args):
 
     net.eval()
 
-    # with torch.no_grad():
-    #     j = 0
-    #     tq_iter = tqdm_(enumerate(test_loader), total=len(test_loader), desc=">> Testing")
-    #     for i, data in tq_iter:
-    #         img = data['images'].to(device)
+    with torch.no_grad():
+        j = 0
+        tq_iter = tqdm_(enumerate(test_loader), total=len(test_loader), desc=">> Testing")
+        for i, data in tq_iter:
+            img = data['images'].to(device)
             
-    #         assert 0 <= img.min() and img.max() <= 1
-    #         B, _, W, H = img.shape
+            assert 0 <= img.min() and img.max() <= 1
+            B, _, W, H = img.shape
 
-    #         pred_logits = net(img)
-    #         pred_probs = F.softmax(pred_logits, dim=1)
+            pred_logits = net(img)
+            pred_probs = F.softmax(pred_logits, dim=1)
 
-    #         # Save predictions
-    #         with warnings.catch_warnings():
-    #             warnings.filterwarnings('ignore', category=UserWarning)
-    #             predicted_class: Tensor = probs2class(pred_probs)
-    #             mult: int = 63 if K == 5 else (255 / (K - 1))
-    #             save_images(predicted_class * mult,
-    #                         data['stems'],
-    #                         destination / "test")
+            # Save predictions
+            with warnings.catch_warnings():
+                warnings.filterwarnings('ignore', category=UserWarning)
+                predicted_class: Tensor = probs2class(pred_probs)
+                mult: int = 63 if K == 5 else (255 / (K - 1))
+                save_images(predicted_class * mult,
+                            data['stems'],
+                            destination / "test")
 
-    #         j += B
+            j += B
 
     print("Running sticking...")
 
     stitch_command = [
         'python', 'stitch.py',
         '--data_folder', str(destination / "test"),
-        '--dest_folder', str(destination / 'volumes' / 'test'),
+        '--dest_folder', str(destination / 'volumes' / 'test'), # /home/scur0483/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2dshallow/fold_1/test
         '--num_classes', '255',
         '--grp_regex', '(Patient_\\d\\d)_\\d\\d\\d\\d',
-        '--source_scan_pattern', 'data/segthor_test/test/{id_}/GT.nii.gz'
+        '--source_scan_pattern', 'data/segthor_test/test/{id_}.nii.gz'
     ]
     
     try:
