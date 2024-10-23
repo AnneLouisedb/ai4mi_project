@@ -29,7 +29,7 @@ from pathlib import Path
 from pprint import pprint
 from operator import itemgetter
 from shutil import copytree, rmtree
-
+import subprocess
 import torch
 import numpy as np
 import torch.nn.functional as F
@@ -137,6 +137,7 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
 
     K: int = datasets_params[args.dataset]['K']
 
+   
     if args.resume:
         # Load the entire model object
         model = torch.load(args.resume, map_location=device)
@@ -147,6 +148,28 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
         net.init_weights()
         net.to(device)
         model = net
+
+     # Load the best model
+    if args.weights_path:
+        print(f">>> Testing: Loaded model from {args.weights_path}")
+        try:
+            model.load_state_dict(torch.load(args.weights_path))
+        except:
+            print(f">>> Loaded nnunet model from {args.weights_path}")
+            # load the file format:  checkpoint_best.pth
+            # it contains a dictionary , we need the key: 'network_weights'
+            checkpoint = torch.load(args.weights_path, map_location=device)
+            # print the dictionary 
+            print("Checkpoint contents:")
+            for key in checkpoint.keys():
+                print(f"- {key}")
+
+            # Load the network weights if the key exists
+            if 'network_weights' in checkpoint:
+                model.load_state_dict(checkpoint['network_weights'])
+                print("Loaded network weights successfully.")
+            else:
+                raise KeyError("'network_weights' key not found in checkpoint.")
     
     lr = args.lr
     if args.optimizer == 'adamW':
@@ -203,14 +226,81 @@ def setup(args) -> tuple[nn.Module, Any, Any, DataLoader, DataLoader, int]:
                             num_workers=args.num_workers,
                             shuffle=False)
 
-    args.dest.mkdir(parents=True, exist_ok=True)
+    test_set = SliceDataset('test',
+                           root_dir,
+                           img_transform=img_transform,
+                           gt_transform=gt_transform,
+                           debug=args.debug)
+    
+    test_loader = DataLoader(test_set,
+                            batch_size=B,
+                            num_workers=args.num_workers,
+                            shuffle=False)
+    
+    if args.dest:
+        args.dest.mkdir(parents=True, exist_ok=True)
 
-    return (model, optimizer, device, train_loader, val_loader, K)
+    return (model, optimizer, device, train_loader, val_loader, test_loader, K)
+
+def runTesting(args):
+    
+    print(f">>> Setting up to test on {args.dataset}")
+    net, _, device, _, _, test_loader, K = setup(args)
+    
+    weights_path = Path(args.weights_path)
+    destination = weights_path.parent
+
+    net.eval()
+
+    # with torch.no_grad():
+    #     j = 0
+    #     tq_iter = tqdm_(enumerate(test_loader), total=len(test_loader), desc=">> Testing")
+    #     for i, data in tq_iter:
+    #         img = data['images'].to(device)
+            
+    #         assert 0 <= img.min() and img.max() <= 1
+    #         B, _, W, H = img.shape
+
+    #         pred_logits = net(img)
+    #         pred_probs = F.softmax(pred_logits, dim=1)
+
+    #         # Save predictions
+    #         with warnings.catch_warnings():
+    #             warnings.filterwarnings('ignore', category=UserWarning)
+    #             predicted_class: Tensor = probs2class(pred_probs)
+    #             mult: int = 63 if K == 5 else (255 / (K - 1))
+    #             save_images(predicted_class * mult,
+    #                         data['stems'],
+    #                         destination / "test")
+
+    #         j += B
+
+    print("Running sticking...")
+
+    stitch_command = [
+        'python', 'stitch.py',
+        '--data_folder', str(destination / "test"),
+        '--dest_folder', str(destination / 'volumes' / 'test'),
+        '--num_classes', '255',
+        '--grp_regex', '(Patient_\\d\\d)_\\d\\d\\d\\d',
+        '--source_scan_pattern', 'data/segthor_test/test/{id_}/GT.nii.gz'
+    ]
+    
+    try:
+        subprocess.run(stitch_command, check=True)
+        print("Stitching completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Stitching failed with error: {e}")
+
+    # subprocess.CalledProcessError: Command '['python', 'stitch.py', '--data_folder',  destination / "test", '--dest_folder', destination /'volumes'/test', '--num_classes', '255', '--grp_regex', '(Patient_\\d\\d)_\\d\\d\\d\\d', '--source_scan_pattern', 'data/segthor_test/test/{id_}/GT.nii.gz']'
+
+
+    
 
 
 def runTraining(args):
     print(f">>> Setting up to train on {args.dataset} with {args.mode}")
-    net, optimizer, device, train_loader, val_loader, K = setup(args)
+    net, optimizer, device, train_loader, val_loader, test_loader, K = setup(args)
 
     if args.loss == 'CE':
         if args.mode == "full":
@@ -345,8 +435,10 @@ def main():
     parser.add_argument('--mode', default='full', choices=['partial', 'full', 'weighted'])
     parser.add_argument('--optimizer', default= 'adam',choices=['adam', 'adamW'], help="Choose between the adam and adamW optimizer")
     parser.add_argument('--lr', default= 0.0005, type=float, help="Choose your learning rate")
-    parser.add_argument('--dest', type=Path, required=True,
+    parser.add_argument('--dest', type=Path, required=False,
                         help="Destination directory to save the results (predictions and weights).")
+    parser.add_argument('--weights_path', type=str, required=False,
+                        help="Path to the model weights file for testing.")
 
     parser.add_argument('--num_workers', type=int, default=5)
     parser.add_argument('--gpu', action='store_true')
@@ -365,9 +457,16 @@ def main():
 
     args = parser.parse_args()
 
+    if not args.weights_path and not args.dest:
+        parser.error("Either --weights_path (testing) or --dest (training) must be provided")
+
     pprint(args)
 
-    runTraining(args)
+    if args.weights_path:
+        runTesting(args)
+    else:
+        runTraining(args)
+
 
 
 if __name__ == '__main__':
