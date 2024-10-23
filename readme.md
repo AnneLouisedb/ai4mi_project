@@ -94,7 +94,7 @@ $ nnUNetv2_train 1 2d 1
 $ nnUNetv2_train 1 3d_fullres 1
 $ nnUNetv2_train 1 3d_lowres 1
 ```
-## Pre-processing
+## Pre-Processing
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
 ### Heart label transformation
@@ -106,10 +106,17 @@ We use the following affine matrix derived with the SimpleITK library. We use a 
  [0.         0.         0.         1.        ]]
 ```
 ### Gaussian Smoothing
+It applies a Gaussian function to smooth the image. This reduces noise and detail, which can help the model generalize patterns.
 
 ### Median Filtering
+It reduces noise while preserving edges. This works by replacing each pixel with the median value of the pixels around it, helping to smooth out the image without blurring significant features.
 
-## Model Architectures
+### Random Crop
+We crop random sections of the image during training, forcing the model to learn on smaller, potentially more varied sections of the image to increase the variety of training samples, improve the model's ability to generalize across different image conditions and prevent overfitting by ensuring the model does not rely too heavily on certain spatial features.
+
+### Rescaling
+Rescaling is done to normalize the pixel values, which can enhance the model's learning process and reduce noise. The pixel values were initially in the range 0-256 (Intensity levels in grayscale) and were rescaled to a smaller range, 0-4. 
+
 ### E-Net
 ![E-Net](images/ENet-architecture.png)
 
@@ -161,7 +168,19 @@ Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconn
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
+## Model Architectures
 
+## Pre and Post Processing of nnU-Net
+
+Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
+
+### Pre-processing
+The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
+
+### Post-processing
+The post-processing phase ensures the accuracy of the segmentation by enforcing single connected components, helping remove small artifacts.  The process involves automated evaluation of connected components and removal of small structures that do not meet certain size criteria, reducing noise and improving segmentation accuracy. Additionally, the decoder effectively integrates higher-resolution feature maps to enhance segmentation precision. 
+
+The nnU-Net framework, both in its 2D and 3D low/high-resolution forms, provides an automated pipeline for image segmentation. The low-resolution 3D nnU-Net captures broader contextual information by working with downsampled data, which helps in detecting large-scale structures. Meanwhile, the high-resolution 3D nnU-Net operates on finer-resolution data, allowing it to capture small details and precise boundaries. 
 
 ## Evaluation Metrics
 TO DO; link to file with HD95 computation and DSC (VARDAN?)
