@@ -176,6 +176,7 @@ We crop random sections of the image during training, forcing the model to learn
 ### Rescaling
 Rescaling is done to normalize the pixel values, which can enhance the model's learning process and reduce noise. The pixel values were initially in the range 0-256 (Intensity levels in grayscale) and were rescaled to a smaller range, 0-4. 
 
+# Model Architectures
 ### E-Net
 ![E-Net](images/ENet-architecture.png)
 
