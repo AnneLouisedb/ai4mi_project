@@ -156,10 +156,6 @@ Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconn
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
-|E-Net (Baseline) | U-Net CE | U-Net DR | sUnet|
-|--------------|---------------------|-------------------------------|----------------------------------|
-| ![enet](images/enet.gif) | ![U-Net CE](images/unet_41.gif) | ![U-Net DR](images/unetdr_41.gif) | ![sunet41](images/sunet_41.gif) |
-
 
 
 ## Evaluation Metrics
@@ -221,6 +217,16 @@ are marked.
 
 
 ### Results on test set
+
+#### Patient 41
+
+|Patient|E-Net (Baseline) | U-Net CE | U-Net DR | sUnet|
+|--------------|--------------|---------------------|-------------------------------|----------------------------------|
+|Patient 41 | ![enet](images/enet.gif) | ![U-Net CE](images/unet_41.gif) | ![U-Net DR](images/unetdr_41.gif) | ![sunet41](images/sunet_41.gif) |
+|Patient 41 | ![enet](images/enet_42.gif) | ![U-Net CE](images/unet_42.gif) | ![U-Net DR](images/unetdr_42.gif) | ![sunet41](images/sunet_42.gif) |
+
+
+
 
 
 ## TO DO
