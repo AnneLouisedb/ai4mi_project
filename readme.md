@@ -98,7 +98,7 @@ $ nnUNetv2_train 1 3d_lowres 1
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
 ### Heart label transformation
-We use the following affine matrix derived with the SimpleITK library. We use a center-of-mass alignment and rotation to ensure proper alignment of the heart labels. 
+We use the following affine matrix derived with the SimpleITK library. We use a center-of-mass alignment and rotation to ensure proper alignment of the heart labels. The detailed implementation can be found in [transform.ipynb](transform.ipynb)  
 ```
 [[1.         0.         0.         0.41042964]
  [0.         1.         0.         0.1911134 ]
