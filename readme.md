@@ -35,7 +35,7 @@ $$L_{tl}(y,\hat{y}) = 1 - \frac{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} }{ \sum_{k=1}
 This allows for adjusting the weight of false positives (FP) and false negatives (FN), which is crucial in medical segmentation tasks where some types of errors are more critical than others.
 
 ### Combined Loss
-In highly unbalanced segmentation tasks, compound losses can balance the overall class distribution while paying attention to smaller and challenging structures. The combined loss, which adds the Dice Loss and Cross Entropy Loss, is implemented in the `runTraining` function in [main.py](main.py)as the option `"DiceCE"`. This combined loss is designed to leverage both the strengths of region-based overlap (Dice Loss) and pixel-wise classification (Cross Entropy). The function sums the results of the two losses:
+Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `"DiceCE"`. This combined loss is designed to leverage both the strengths of region-based overlap (Dice Loss) and voxel-wise classification (Cross Entropy). The function sums the results of the two losses:
 
 $L_{dlce} = L_{dsc} + L_{ce}$
 
