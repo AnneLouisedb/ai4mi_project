@@ -255,8 +255,6 @@ Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconn
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
-## Model Architectures
-
 ## Pre and Post Processing of nnU-Net
 
 Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
@@ -270,7 +268,22 @@ The post-processing phase ensures the accuracy of the segmentation by enforcing 
 The nnU-Net framework, both in its 2D and 3D low/high-resolution forms, provides an automated pipeline for image segmentation. The low-resolution 3D nnU-Net captures broader contextual information by working with downsampled data, which helps in detecting large-scale structures. Meanwhile, the high-resolution 3D nnU-Net operates on finer-resolution data, allowing it to capture small details and precise boundaries. 
 
 ## Evaluation Metrics
-TO DO; link to file with HD95 computation and DSC (VARDAN?)
+To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) and the 95\% Hausdorff Distance (HD95) both expressed in $mm$ and implemented in [evaluation.py](evaluation.py). 
+
+### Dice Similarity Coefficient (DSC)
+The Dice Similarity Coefficient (DSC) focuses on the overlap between predicted and ground truth segmentations. It provides a score between 0 and 1, with 1 indicating perfect overlap. 
+
+$DSC(G,P) = \frac{2 \times |P \cap G|}{|P| + |G|}$
+
+In our project, we compute 2D DSC for most models, except for the 3D nnU-Net, which processes entire 3D volumes.
+
+### 95th Percentile Hausdorff Distance (HD95)
+The 95th percentile Hausdorff Distance (HD95) measures boundary precision by calculating the 95th percentile of the distances between boundary points of the predicted and ground truth segmentations. This helps account for worst-case boundary discrepancies while ignoring extreme outliers.
+
+$HD95(G,P) = \text{percentile}{95} \left( \min{p \in P} || g - p || \right)$
+
+HD95 is used as a 3D metric for all models in our project. 
+
 
 ## Results
 
