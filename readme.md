@@ -158,7 +158,7 @@ ensuring higher quality in the segmentation output.
 
 |E-Net (Baseline) | U-Net CE | U-Net DR | nnU-Net DR |
 |--------------|---------------------|-------------------------------|----------------------------------|
-| ![enet](images/enet.gif) | ![U-Net CE](images/unet.gif) | ![U-Net DR](images/unetdr.gif) | ![nnU-Net DR](..) |
+| ![enet](images/enet.gif) | ![U-Net CE](images/unet.gif) | ![U-Net DR](images/unetdr.gif) | ![nnU-Net DR](images/unetDR.mov) |
 
 
 
