@@ -11,8 +11,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 [TO DO LO]
 
 ## Loss functions
-All loss functions are implemented in the [losses.py](losses.py) file and can be selected within the [main.py](main.py) file in the `runTraining` function. The available loss functions can be chosen through the `--loss` argument when running the training process.
-The following loss functions are implemented in our project:
+All loss functions are implemented in the [losses.py](losses.py) and can be chosen through the `--loss` argument when running the training process in [main.py](main.py).
 
 ### Dice Loss
 Dice Loss focuses on the overlap between the predicted and ground truth regions, 
