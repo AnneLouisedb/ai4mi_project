@@ -36,23 +36,6 @@ def extract_files(
                 print(f"Error reading {file}: {e}")
     return results
 
-
-def print_image_info(image: sitk.Image, image_name: str):
-    """
-    Print detailed information about a SimpleITK image.
-
-    Args:
-        image (sitk.Image): The image to inspect.
-        image_name (str): A descriptive name for the image.
-    """
-    print(f"--- {image_name} ---")
-    print(f"Size: {image.GetSize()}")
-    print(f"Spacing: {image.GetSpacing()}")
-    print(f"Origin: {image.GetOrigin()}")
-    print(f"Direction: {image.GetDirection()}")
-    print(f"Pixel Type: {image.GetPixelIDTypeAsString()}\n")
-
-
 def resample_image(reference_image: sitk.Image, moving_image: sitk.Image, interpolator=sitk.sitkNearestNeighbor) -> sitk.Image:
     """
     Resample moving_image to the space of reference_image.
@@ -95,8 +78,6 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
     # Verify normalization
     unique_pred = np.unique(pred_np)
     unique_target = np.unique(target_np)
-    print(f"Unique labels in prediction after normalization: {unique_pred}")
-    print(f"Unique labels in ground truth: {unique_target}")
 
     # Define classes (including background)
     num_classes = 5  # 0: Background, 1-4: Organs
@@ -153,16 +134,13 @@ def batch_hausdorff_distance(pred: sitk.Image, target: sitk.Image) -> np.ndarray
             hd95 = (np.percentile(dist_y_true, 95) + np.percentile(dist_y_pred, 95)) / 2.0
             hausdorff_distances[c, 1] = hd95
 
-        print(f"{organ_names[c]}:")
-        print(f"  95th Percentile Hausdorff Distance: {hausdorff_distances[c, 1]:.4f}")
-        print(f"  Hausdorff Distance: {hausdorff_distances[c, 0]:.4f}")
-
     return hausdorff_distances
 
 
 def plot_hd_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str):
     """
     Plot a line graph of Hausdorff distances (HD) for each organ across patients, excluding background.
+    Display the values on each point in the graph.
 
     Args:
         patient_ids (List[str]): List of patient identifiers.
@@ -188,6 +166,11 @@ def plot_hd_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str):
         # Plot HD
         plt.plot(patient_ids, hd, label=f"{organ_names[c]} HD", color=colors[c], linestyle='-')
 
+        # Display value on each point
+        for i, value in enumerate(hd):
+            if not np.isnan(value):
+                plt.text(i, value, f"{value:.2f}", fontsize=8, ha='center', va='bottom')
+
     # Customize plot
     plt.xlabel('Patient ID')
     plt.ylabel('Hausdorff Distance (mm)')
@@ -210,6 +193,7 @@ def plot_hd_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str):
 def plot_hd95_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str):
     """
     Plot a line graph of 95th Percentile Hausdorff distances (HD95) for each organ across patients, excluding background.
+    Display the values on each point in the graph.
 
     Args:
         patient_ids (List[str]): List of patient identifiers.
@@ -235,6 +219,11 @@ def plot_hd95_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str
         # Plot HD95
         plt.plot(patient_ids, hd95, label=f"{organ_names[c]} HD95", color=colors[c], linestyle='--')
 
+        # Display value on each point
+        for i, value in enumerate(hd95):
+            if not np.isnan(value):
+                plt.text(i, value, f"{value:.2f}", fontsize=8, ha='center', va='bottom')
+
     # Customize plot
     plt.xlabel('Patient ID')
     plt.ylabel('95th Percentile Hausdorff Distance (mm)')
@@ -257,6 +246,7 @@ def plot_hd95_per_organ(patient_ids: List[str], all_results: np.ndarray, bf: str
 def plot_avg_hd_per_patient(patient_ids: List[str], all_results: np.ndarray, bf: str):
     """
     Plot a line graph of average Hausdorff distances (HD) across all organs per patient.
+    Display the values on each point in the graph.
 
     Args:
         patient_ids (List[str]): List of patient identifiers.
@@ -269,6 +259,11 @@ def plot_avg_hd_per_patient(patient_ids: List[str], all_results: np.ndarray, bf:
     # Initialize plot
     plt.figure(figsize=(14, 8))
     plt.plot(patient_ids, avg_hd, label='Average HD', color='purple', linestyle='-')
+
+    # Display value on each point
+    for i, value in enumerate(avg_hd):
+        if not np.isnan(value):
+            plt.text(i, value, f"{value:.2f}", fontsize=8, ha='center', va='bottom')
 
     # Customize plot
     plt.xlabel('Patient ID')
@@ -290,6 +285,45 @@ def plot_avg_hd_per_patient(patient_ids: List[str], all_results: np.ndarray, bf:
 
 
 def plot_avg_hd95_per_patient(patient_ids: List[str], all_results: np.ndarray, bf: str):
+    """
+    Plot a line graph of average 95th Percentile Hausdorff distances (HD95) across all organs per patient.
+    Display the values on each point in the graph.
+
+    Args:
+        patient_ids (List[str]): List of patient identifiers.
+        all_results (np.ndarray): Array of shape (num_patients, num_organs, 2) containing HD and HD95.
+        bf (str): Base folder identifier for saving plots.
+    """
+    # Exclude background (class 0) and compute average HD95 per patient
+    avg_hd95 = np.nanmean(all_results[:, 1:, 1], axis=1)  # Shape: (num_patients,)
+
+    # Initialize plot
+    plt.figure(figsize=(14, 8))
+    plt.plot(patient_ids, avg_hd95, label='Average HD95', color='orange', linestyle='--')
+
+    # Display value on each point
+    for i, value in enumerate(avg_hd95):
+        if not np.isnan(value):
+            plt.text(i, value, f"{value:.2f}", fontsize=8, ha='center', va='bottom')
+
+    # Customize plot
+    plt.xlabel('Patient ID')
+    plt.ylabel('Average 95th Percentile Hausdorff Distance (mm)')
+    plt.title('Average 95th Percentile Hausdorff Distance (HD95) Across All Organs per Patient')
+    plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+
+    # Create the directory if it doesn't exist
+    save_dir = Path('results/segthor') / Path(bf)
+    save_dir.mkdir(parents=True, exist_ok=True)
+    save_path = save_dir / "Average_HD95_per_patient.png"
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"Average 95th Percentile Hausdorff Distance plot saved to {save_path}")
+
     """
     Plot a line graph of average 95th Percentile Hausdorff distances (HD95) across all organs per patient.
 
@@ -361,9 +395,6 @@ def run(args):
     for patient_id, pred_image in predictions.items():
         if patient_id in ground_truths:
             gt_image = ground_truths[patient_id]
-            print(f"\nPatient ID: {patient_id}")
-            print_image_info(pred_image, "Prediction Before Resampling")
-            print_image_info(gt_image, "Ground Truth")
 
             # Resample prediction to match ground truth if necessary
             if not (
@@ -372,9 +403,7 @@ def run(args):
                 pred_image.GetOrigin() == gt_image.GetOrigin() and
                 pred_image.GetDirection() == gt_image.GetDirection()
             ):
-                print("Resampling prediction to match ground truth...")
                 pred_image = resample_image(gt_image, pred_image, interpolator=sitk.sitkNearestNeighbor)
-                print_image_info(pred_image, "Prediction After Resampling")
 
             # Proceed with distance calculations
             results = batch_hausdorff_distance(pred_image, gt_image)
@@ -389,9 +418,6 @@ def run(args):
 
     all_results = np.array(all_results)  # Shape: (num_patients, num_organs, 2)
 
-    print("All Hausdorff distances (per patient):")
-    print(all_results)
-
     # Sort patient_ids and all_results based on patient_ids for consistent plotting
     try:
         sorted_pairs = sorted(zip(patient_ids, all_results), key=lambda pair: int(pair[0]))
@@ -402,15 +428,24 @@ def run(args):
     patient_ids_sorted = list(patient_ids_sorted)
     all_results_sorted = np.array(all_results_sorted)
 
-    # Print the sorted results
-    print("Sorted Hausdorff distances (per patient):")
-    print(all_results_sorted)
-
-    # Now call the plotting functions
+    # Call the plotting functions
     plot_hd_per_organ(patient_ids_sorted, all_results_sorted, bf)
     plot_hd95_per_organ(patient_ids_sorted, all_results_sorted, bf)
     plot_avg_hd_per_patient(patient_ids_sorted, all_results_sorted, bf)
     plot_avg_hd95_per_patient(patient_ids_sorted, all_results_sorted, bf)
+
+    # Calculate and print average HD and HD95 per organ across all patients
+    organ_names = ['Background', 'Esophagus', 'Heart', 'Trachea', 'Aorta']
+    avg_hd_per_organ = np.nanmean(all_results_sorted[:, :, 0], axis=0)  # Average HD for each organ
+    avg_hd95_per_organ = np.nanmean(all_results_sorted[:, :, 1], axis=0)  # Average HD95 for each organ
+
+    print("\nAverage HD and HD95 per organ across all patients:")
+    for i in range(1, len(organ_names)):  # Start from 1 to exclude background
+        print(f"{organ_names[i]} - Average HD: {avg_hd_per_organ[i]:.4f}, Average HD95: {avg_hd95_per_organ[i]:.4f}")
+
+    # Print the model name at the end
+    print(f"\nModel used: {args.model}")
+
 
 
 def get_args() -> argparse.Namespace:

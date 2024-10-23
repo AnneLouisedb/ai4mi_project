@@ -38,3 +38,8 @@ python nnUnet_transform_data.py --data_dir 'data/segthor_train' --nnUNet_raw 'nn
 cd nnUNet
 
 nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity 
+
+cp -f /home/scur2494/ai4mi_project/nnUNet_Mods/evaluate_predictions.py /home/scur2494/ai4mi_project/nnUNet/nnunetv2/evaluation/evaluate_predictions.py
+cp -f /home/scur2494/ai4mi_project/nnUNet_Mods/nnUNetPlans.json /home/scur2494/ai4mi_project/nnUNet/nnUNet_preprocessed/Dataset001_SegTHOR/nnUNetPlans.json
+cp -f /home/scur2494/ai4mi_project/nnUNet_Mods/nnUNetTrainer.py /home/scur2494/ai4mi_project/nnUNet/nnunetv2/training/nnUNetTrainer/nnUNetTrainer.py
+cp -f /home/scur2494/ai4mi_project/nnUNet_Mods/run_training.py /home/scur2494/ai4mi_project/nnUNet/nnunetv2/run/run_training.py

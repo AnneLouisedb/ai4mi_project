@@ -42,8 +42,7 @@ $L_{dlce} = L_{dsc} + L_{ce}$
 ## Model Training
 ### Regular Training
 ```
-$ TODO
-$ TOD
+$ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'UNet' --loss 'CE'
 
 ```
 
@@ -70,7 +69,7 @@ $ TOD
 #### Multi-phase training
 Example of multi-phase training, loading a model trained on *cross entropy* and further training on the *tversky loss*
 ```
-$ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'SUNet' --loss 'tversky' --resume 'model/ce_model.pkl'
+$ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'SUNet' --loss 'tversky' --resume 'model/ce_model.pkl' --best_dice 0.891
 
 ```
 
@@ -82,18 +81,78 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--resume 'model/ce_model.pkl'` | Path to the pre-trained model (trained with cross-entropy) |
 
 ---------
+#### nnU-Net Setup and Training
 
+##### Setup
+```bash
+# Set environment variables
+export nnUNet_raw='/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_raw'
+export nnUNet_preprocessed='/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_preprocessed'
+export nnUNet_results='/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results'
 
-### nnU-Net Training
-Before training make sure to run 'jobs/nnUNet-Setup.job'. 
+# Clone the nnU-Net repository
+git clone https://github.com/MIC-DKFZ/nnUNet.git
+cd nnUNet
+
+# Install nnU-Net
+pip install -e .
+
+# Create necessary directories
+mkdir nnUNet_results
+mkdir nnUNet_preprocessed
+
+# Navigate back to the project root
+cd ..
+
+# Transform data
+python nnUnet_transform_data.py --data_dir 'data' --nnUNet_raw 'nnUNet/nnUNet_raw' --nnUNet_preprocessed 'nnUNet/nnUNet_preprocessed'
+
+# Navigate to the nnUNet directory
+cd nnUNet
+
+# Plan and preprocess
+nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity
+
+# Copy modified files
+cp -f /home/scurxxxx/ai4mi_project/nnUNet_Mods/evaluate_predictions.py /home/scurxxxx/ai4mi_project/nnUNet/nnunetv2/evaluation/evaluate_predictions.py
+cp -f /home/scurxxxx/ai4mi_project/nnUNet_Mods/nnUNetPlans.json /home/scurxxxx/ai4mi_project/nnUNet/nnUNet_preprocessed/Dataset001_SegTHOR/nnUNetPlans.json
+cp -f /home/scurxxxx/ai4mi_project/nnUNet_Mods/nnUNetTrainer.py /home/scurxxxx/ai4mi_project/nnUNet/nnunetv2/training/nnUNetTrainer/nnUNetTrainer.py
+cp -f /home/scurxxxx/ai4mi_project/nnUNet_Mods/run_training.py /home/scurxxxx/ai4mi_project/nnUNet/nnunetv2/run/run_training.py
 ```
-# Training XXX inside thennU-Net pipeline
-$ nnUNetv2_train 1 2d 1
+##### Run Training
+```bash
+# 2D UNet with deep supervision
+nnUNetv2_train 1 2d 1 --dropout_prob 0.0
 
-# Training XXX inside the nnU-Net pipeline
-$ nnUNetv2_train 1 3d_fullres 1
-$ nnUNetv2_train 1 3d_lowres 1
+# 2D UNet without deep supervision
+nnUNetv2_train 1 2dUNet 1 --dropout_prob 0.0
+
+# 2D shallow UNet without dropout
+nnUNetv2_train 1 2dshallow 1 --dropout_prob 0.0
+
+# 2D shallow UNet with dropout
+nnUNetv2_train 1 2dshallowdropout 1 --dropout_prob 0.2
+
+# 2D UNet with dilated bottleneck
+nnUNetv2_train 1 2dUNetDR 1 --dropout_prob 0.0
+
+# 3D full resolution version
+nnUNetv2_train 1 3d_fullres 1
+
+# 3D low resolution version
+nnUNetv2_train 1 3d_lowres 1
 ```
+#### Plotting
+```bash
+#To generate a a similar plot to other models you can use :
+python plot_dice_nnUNet --file '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/fold_1/training_log_2024_10_15_15_54_21.txt' --dest '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/dice.png' 
+```
+##### Results
+```bash
+#Results are stored in:
+/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results
+```
+There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job
 ## Pre-Processing
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 

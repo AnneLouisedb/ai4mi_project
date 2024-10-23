@@ -5,7 +5,7 @@
 #SBATCH --job-name=nnUNet_setup
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --time=01:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=slurm_output_%A.out
 
 module purge
@@ -22,12 +22,24 @@ export nnUNet_results="/home/scur2494/ai4mi_project/nnUNet/nnUNet_results"
 
 #replace with your home directory before running.
 
-nnUNetv2_train 1 2d 1
-python plot_dice_nnUNet --file '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/fold_1/training_log_2024_10_15_15_54_21.txt' --dest '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/dice.png' 
-#2D version
+# 2D UNet with deep supervision
+nnUNetv2_train 1 2d 1 --dropout_prob 0.0
+python plot_dice_nnUNet --file '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/fold_1/training_log_2024_10_15_15_54_21.txt' --dest '/home/scur2494/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2d/dice.png'
 
+# 2D UNet without deep supervision
+nnUNetv2_train 1 2dUNet 1 --dropout_prob 0.0
+
+# 2D shallow UNet without dropout
+nnUNetv2_train 1 2dshallow 1 --dropout_prob 0.0
+
+# 2D shallow UNet with dropout
+nnUNetv2_train 1 2dshallowdropout 1 --dropout_prob 0.2
+
+# 2D UNet with dilated bottleneck
+nnUNetv2_train 1 2dUNetDR 1 --dropout_prob 0.0
+
+# 3D full resolution version
 nnUNetv2_train 1 3d_fullres 1
-#3d_fullres version
 
+# 3D low resolution version
 nnUNetv2_train 1 3d_lowres 1
-#3d_lowres version
