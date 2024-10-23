@@ -35,7 +35,7 @@ $$L_{tl}(y,\hat{y}) = 1 - \frac{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} }{ \sum_{k=1}
 This allows for adjusting the weight of false positives (FP) and false negatives (FN), which is crucial in medical segmentation tasks where some types of errors are more critical than others.
 
 ### Combined Loss
-Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `"DiceCE"`. The function sums the results of the two losses:
+Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `"DiceCE"`. 
 
 $L_{dlce} = L_{dsc} + L_{ce}$
 
