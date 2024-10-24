@@ -217,7 +217,7 @@ We crop random sections of the image during training, forcing the model to learn
 ### Rescaling
 Rescaling is done to normalize the pixel values, which can enhance the model's learning process and reduce noise. The pixel values were initially in the range 0-256 (Intensity levels in grayscale) and were rescaled to a smaller range, 0-4. 
 
-## Autoamated Pre and Post Processing of the nnU-Net framework
+## Automated Pre and Post Processing of the nnU-Net framework
 Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
 ##### Segthor Dataset Fingerprint
 - (1)
@@ -231,7 +231,7 @@ TO DO
 
 | Ground Truth | U-Net | U-Net+DR | nnU-Net+DR |
 |--------------|----------|----------|------------|
-| <img src="images/GT.jpeg" width="150" height="150" /> | <img src="images/unet_ce.jpeg" width="150" height="150" /> | <img src="images/unet+dr.jpeg" width="150" height="150" /> | <img src="images/nnunet+DR.jpeg" width="150" height="150" /> |
+| <img src="images/GT.jpeg" width="300" height="300" /> | <img src="images/unet_ce.jpeg" width="300" height="300" /> | <img src="images/unet+dr.jpeg" width="300" height="300" /> | <img src="images/nnunet+DR.jpeg" width="300" height="300" /> |
 
 In the figure above, the segmentation results for patient 16 across various models are being
 compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR. 
