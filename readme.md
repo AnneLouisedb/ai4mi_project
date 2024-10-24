@@ -267,7 +267,7 @@ Training our architectures within the nnU-Net pipeline automates pre- and post-p
 <img src="images/nn-Unet_architecture.png" width="600" height="300" />*F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).*
 
 ##### Segthor Dataset Fingerprint
-- (1) Distribution of spacings: standardize to 2.5,0.976,0.976
+- (1) Distribution of spacings: standardize to $0.976 \times 0.976 \times 2.5 mm^3$
 - (2) Median image size 512 x 512 voxels  
 - (3) Intensity distribution
 - (4) Image modality: CT 
