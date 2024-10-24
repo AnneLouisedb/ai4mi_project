@@ -4,7 +4,8 @@
  By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
 
 ## Project overview
-The project is based around the SegTHOR challenge data. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea. We evaluate a range of existing models, including E-Net, U-Net, V-Net, and two U-Net variants (sU-Net and U-Net+DR) on the task of multi-organ segmentation. In addition, we train these architectures in the nnU-Net training pipeline.
+The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
+[TO DO LO]
 
 
 
@@ -20,10 +21,11 @@ The project is based around the SegTHOR challenge data. The challenge was origin
 | Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
 |-----------|------------------|----------|----------|-------|
 | Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
-| Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_42.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
 
 
 ## Setup
+[TO DO LO]
 
 <details>
 <summary>Click to expand environment setup </summary>
