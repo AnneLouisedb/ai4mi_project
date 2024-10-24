@@ -30,6 +30,9 @@ All loss functions are implemented in the [losses.py](losses.py) and can be chos
 
 $L_{dlce} = L_{dsc} + L_{ce}$
 
+To make the table visible with an expander in a README file, you can use HTML and CSS to create a collapsible section. Here's how you can format it:
+
+
 
 ## Model Training
 ### Regular Training
@@ -37,6 +40,9 @@ $L_{dlce} = L_{dsc} + L_{ce}$
 $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segthor/SUNet_Hyb_CE/ce --gpu --model 'UNet' --loss 'CE'
 
 ```
+<details>
+<summary>Click to expand training options</summary>
+
 
 | Argument | Default | Choices | Description |
 |----------|---------|---------|-------------|
@@ -59,6 +65,10 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--dropout_prob` | 0.2 | - | Dropout probability |
 
 ---------
+
+</details>
+
+
 
 #### Multi-phase training
 Example of multi-phase training, loading a model trained on *cross entropy* and further training on the *tversky loss*
