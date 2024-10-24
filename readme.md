@@ -331,11 +331,10 @@ D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Predict
 To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) implemented in [main.py](main.py) and calculated after every epoch. And the 95\% Hausdorff Distance (HD95) expressed in $mm$, implemented in [evaluation.py](evaluation.py). 
 
 ### Dice Similarity Coefficient (DSC)
-The Dice Similarity Coefficient (DSC) focuses on the overlap between predicted and ground truth segmentations. It provides a score between 0 and 1, with 1 indicating perfect overlap. 
+The Dice Similarity Coefficient (DSC) focuses on the overlap between predicted and ground truth segmentations. It provides a score between 0 and 1, with 1 indicating perfect overlap. In our project, we compute 3D DSC for all models.
 
 $DSC(G,P) = \frac{2 \times |P \cap G|}{|P| + |G|}$
 
-In our project, we compute 2D DSC for most models, except for the 3D nnU-Net, which processes entire 3D volumes.
 
 ### 95th Percentile Hausdorff Distance (HD95)
 The 95th percentile Hausdorff Distance (HD95) measures boundary precision by calculating the 95th percentile of the distances between boundary points of the predicted and ground truth segmentations. This helps account for worst-case boundary discrepancies while ignoring extreme outliers.
