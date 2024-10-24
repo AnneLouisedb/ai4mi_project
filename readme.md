@@ -73,8 +73,6 @@ All loss functions are implemented in the [losses.py](losses.py) and can be chos
 
 $L_{dlce} = L_{dsc} + L_{ce}$
 
-To make the table visible with an expander in a README file, you can use HTML and CSS to create a collapsible section. Here's how you can format it:
-
 
 ## Model Training
 ### Regular Training
