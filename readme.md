@@ -22,7 +22,7 @@ This project is based around the SegTHOR challenge data. The challenge ia based 
 | Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_42.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
 
-*Segmentation for a variety of models trained in the nnU-Net pipeline. The visualisations above show segmentation results for two patients in the test set. With (1) an nnU-Net-configured U-Net trained with deep supervision, (2) a standard U-Net topology without
+*Segmentation for a variety of models trained in the nnU-Net pipeline. The visualisations above show segmentation results for two patients in the test set. With (1) a nnU-Net-configured U-Net trained with deep supervision, (2) a standard U-Net topology without
 dataset-specific configuration, and (3) our custom U-Net variant U-Net + DR, and (4) E-Net integrated into the nnU-Net training
 pipeline.*
 
