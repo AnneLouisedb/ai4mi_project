@@ -1,5 +1,5 @@
-# AI for Medical Imaging — Semantic Segmentation for Thoracic Organs at Risk
- **University of Amsterdam**
+# Semantic Segmentation for Thoracic Organs at Risk
+ **University of Amsterdam - AI for Medical Imaging 2024**
 
  By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
 
