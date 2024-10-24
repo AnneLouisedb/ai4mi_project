@@ -59,7 +59,7 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--debug` | False | - | Run in debug mode with reduced dataset (flag) |
 | `--model` | enet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
 | `--filter` | None | gaussian, median, non_local_means, bilateral, wavelet | Preprocessing filter |
-| `--loss` | CE | CE, Dice, DiceCE, generalised_dice, multiclass_dice, tversky | Loss function |
+| `--loss` | CE | CE, Dice, DiceCE, tversky | Loss function |
 | `--random_crop_h` | 100 | - | Height for random crop |
 | `--random_crop_w` | 100 | - | Width for random crop |
 | `--resume` | None | - | Path to model for resuming training |
