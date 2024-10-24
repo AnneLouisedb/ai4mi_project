@@ -195,7 +195,7 @@ There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job, n
 
 ---------
 
-## Pre-Processing
+## Manual Pre-Processing
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
 ### Heart label transformation
