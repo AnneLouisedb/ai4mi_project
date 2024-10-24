@@ -266,6 +266,9 @@ Rescaling is done to normalize the pixel values, which can enhance the model's l
 
 ## Automated Pre and Post Processing of the nnU-Net framework
 Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
+
+<img src="images/nn-Unet_architecture.png" width="600" height="300" />*F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).*
+
 ##### Segthor Dataset Fingerprint
 - (1)
 - (2)
@@ -303,10 +306,6 @@ C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcem
 
 O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
 
-### nnU-Net
-![nnU-Net architecture](images/nn-Unet_architecture.png)
-
-F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
 
 ### sU-Net
 ![sU-Net architecture](images/sU-Net.png)
