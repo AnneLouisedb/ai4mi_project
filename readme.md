@@ -7,13 +7,13 @@
 This project is based around the SegTHOR challenge data. The challenge ia based on the segmentation of the following organs: heart, aorta, esophagus and trachea. We evaluate a range of existing models, including E-Net, U-Net, V-Net, and two U-Net variants (sU-Net, U-Net+DR) on the task of multi-organ segmentation. In addition, we train these architectures in the nnU-Net training pipeline. 
 
 ### Results on test set
-**Initial training**
+#### Initial training
 | Patient   | E-Net (Baseline) | 2D U-Net CE | 2D U-Net+DR | sU-Net |
 |-----------|------------------|----------|----------|-------|
 | Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
-**Training architectures inside the nnU-Net pipeline**
+#### Training architectures inside the nnU-Net pipeline
 
 | Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
 |-----------|------------------|----------|----------|-------|
