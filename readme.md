@@ -231,7 +231,7 @@ TO DO
 
 | Ground Truth | U-Net | U-Net+DR | nnU-Net+DR |
 |--------------|----------|----------|------------|
-| <img src="images/GT.jpeg" width="300" height="300" /> | <img src="images/unet_ce.jpeg" width="300" height="300" /> | <img src="images/unet+dr.jpeg" width="300" height="300" /> | <img src="images/nnunet+DR.jpeg" width="300" height="300" /> |
+| <img src="images/GT.jpeg" width="800" height="300" /> | <img src="images/unet_ce.jpeg" width="800" height="300" /> | <img src="images/unet+dr.jpeg" width="800" height="300" /> | <img src="images/nnunet+DR.jpeg" width="800" height="300" /> |
 
 In the figure above, the segmentation results for patient 16 across various models are being
 compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR. 
