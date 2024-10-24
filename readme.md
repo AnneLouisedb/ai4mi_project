@@ -346,7 +346,7 @@ HD95 is used as a 3D metric for all models in our project.
 ### Results on validation set
 
 ![images/trainresults.png](images/trainresults.png)
-*Segmentation results for our best performing models. For each organ, the **best** 3D DSC and <ins> best </ins> HD95 are marked.*
+*Segmentation results for our best performing models, measured by the 3D DSC on a hidden validation set. The table shows results for the best epoch. Loss functions used are cross-entropy (ce), dice loss (dl) and weighted cross-entropy (wce). For each organ, the **best** 3D DSC and <ins> best </ins> HD95 are marked.*
 
 ## Submission and scoring [TO DO remove]
 Groups will have to submit:
