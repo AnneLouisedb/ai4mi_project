@@ -283,8 +283,8 @@ TO DO
 |--------------|----------|----------|------------|
 | <img src="images/GT.jpeg" width="800" height="300" /> | <img src="images/unet_ce.jpeg" width="800" height="300" /> | <img src="images/unet+dr.jpeg" width="800" height="300" /> | <img src="images/nnunet+DR.jpeg" width="800" height="300" /> |
 
-In the figure above, the segmentation results for patient 16 across various models are being
-compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR. 
+*In the figure above, the segmentation results for patient 16 across various models are being
+compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR.*
 
 The nnU-Net segmentation showcases a significant improvement, due to its **incorporated pre- and post-processing steps**. 
 Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
@@ -298,13 +298,11 @@ ensuring higher quality in the segmentation output.
 # Model Architectures
 ### E-Net
 ![E-Net](images/ENet-architecture.png)
-
-C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).
+*C. He, L. Chen, L. Xu, C. Yang, X. Liu, and B. Yang, "IRLSOT: Inverse Reinforcement Learning for Scene-Oriented Trajectory Prediction," *IET Intelligent Transport Systems*, vol. 16, 2022. [doi:10.1049/itr2.12172](https://doi.org/10.1049/itr2.12172).*
 
 ### Standard U-Net
 ![U-Net architecture](images/u-net-architecture.png)
-
-O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).
+*O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Biomedical Image Segmentation,” in *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, ser. LNCS, vol. 9351. Springer, 2015, pp. 234–241. Available: [arXiv:1505.04597](https://arxiv.org/abs/1505.04597).*
 
 
 ### sU-Net
