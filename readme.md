@@ -220,6 +220,10 @@ python plot_dice_nnUNet --file '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_resul
 ```bash
 #Results are stored in:
 /home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results
+
+#to store the results in a numpy array run the following script
+python store_metrics.py --src '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2dUNet/fold_1/validation' --dest '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results/Dataset001_SegTHOR/nnUNetTrainer__nnUNetPlans__2dUNet/fold_1/validation' --gt_src '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_preprocessed/Dataset001_SegTHOR/gt_segmentations'
+
 ```
 ##### Inference on Test Set
 Rename the test_set to the following format:
