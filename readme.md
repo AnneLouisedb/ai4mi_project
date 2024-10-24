@@ -14,7 +14,7 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 | Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
-### Results on test set trained into nnU-Net training pipeline 
+### Results on test set training architectures inside the nnU-Net pipeline 
 
 | Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
 |-----------|------------------|----------|----------|-------|
