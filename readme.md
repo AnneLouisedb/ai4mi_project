@@ -1,11 +1,10 @@
-# AI for Medical Imaging — Semantic Segmentation for Organs at Risk
+# AI for Medical Imaging — Semantic Segmentation for Thoracic Organs at Risk
  **University of Amsterdam**
 
  By Vardan Narula, AnneLouise de Boer, Gina Luijkx, Julotte van der Beek, and Dur e Najaf Amjad 
 
 ## Project overview
-The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
-[TO DO LO]
+The project is based around the SegTHOR challenge data. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea. We evaluate a range of existing models, including ENet~\cite{ENet}, U-Net, V-Net, and two U-Net variants on the task of multi-organ segmentation. In addition, we train these architectures in the nnU-Net training pipeline. 
 
 
 
@@ -25,7 +24,6 @@ The project is based around the SegTHOR challenge data, which was kindly allowed
 
 
 ## Setup
-[TO DO LO]
 
 <details>
 <summary>Click to expand environment setup </summary>
