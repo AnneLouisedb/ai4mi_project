@@ -275,7 +275,7 @@ Training our architectures within the nnU-Net pipeline automates pre- and post-p
 - (4) Image modality: CT 
 
 ### Pre-processing
-In this implementation, based on the [dataset fingerprint](source)images are resampled in-plane with third order spline, out of plane with nearest neighbour. Intensity normalization for CT images (CTNormalization scheme) involves global data percentile clipping and z-score normalization using the global foreground mean, helping the model to generalize better during training. 
+In this implementation, based on the [dataset fingerprint](data2/dataset_fingerprint.json) images are resampled in-plane with third order spline, out of plane with nearest neighbour. Intensity normalization for CT images (CTNormalization scheme) involves global data percentile clipping and z-score normalization using the global foreground mean, helping the model to generalize better during training. 
 ### Post-processing
 TO DO - refer to image?
 
