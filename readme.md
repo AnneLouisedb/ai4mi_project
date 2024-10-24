@@ -33,7 +33,6 @@ $L_{dlce} = L_{dsc} + L_{ce}$
 To make the table visible with an expander in a README file, you can use HTML and CSS to create a collapsible section. Here's how you can format it:
 
 
-
 ## Model Training
 ### Regular Training
 ```
@@ -62,7 +61,7 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--random_crop_w` | 100 | - | Width for random crop |
 | `--resume` | None | - | Path to model for resuming training |
 | `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
-| `--dropout_prob` | 0.2 | - | Dropout probability |
+| `--dropout_prob` | 0.0 | - | Dropout probability |
 
 ---------
 
@@ -218,7 +217,7 @@ We crop random sections of the image during training, forcing the model to learn
 ### Rescaling
 Rescaling is done to normalize the pixel values, which can enhance the model's learning process and reduce noise. The pixel values were initially in the range 0-256 (Intensity levels in grayscale) and were rescaled to a smaller range, 0-4. 
 
-## Autoamted Pre and Post Processing of nnU-Net
+## Autoamated Pre and Post Processing of the nnU-Net framework
 Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
 
 ### Pre-processing
