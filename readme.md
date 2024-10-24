@@ -6,15 +6,14 @@
 ## Project overview
 This project is based around the SegTHOR challenge data. The challenge ia based on the segmentation of the following organs: heart, aorta, esophagus and trachea. We evaluate a range of existing models, including E-Net, U-Net, V-Net, and two U-Net variants (sU-Net, U-Net+DR) on the task of multi-organ segmentation. In addition, we train these architectures in the nnU-Net training pipeline. 
 
-
 ### Results on test set
-
+**Initial training**
 | Patient   | E-Net (Baseline) | 2D U-Net CE | 2D U-Net+DR | sU-Net |
 |-----------|------------------|----------|----------|-------|
 | Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
-### Results on test set -- training architectures inside the nnU-Net pipeline 
+**Training architectures inside the nnU-Net pipeline**
 
 | Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
 |-----------|------------------|----------|----------|-------|
@@ -271,10 +270,11 @@ Training our architectures within the nnU-Net pipeline automates pre- and post-p
 - (2) Median image size 512 x 512 voxels  
 - (3) Intensity distribution
 - (4) Image modality: CT 
+
 ### Pre-processing
-In this implementation, images are resampled in-plane with third order spline, out of plane with nearest neighbour. Intensity normalization for CT images (CTNormalization scheme) involves global data percentile clipping and z-score normalization using the global foreground mean, helping the model to generalize better during training. 
+In this implementation, based on the [dataset fingerprint](source)images are resampled in-plane with third order spline, out of plane with nearest neighbour. Intensity normalization for CT images (CTNormalization scheme) involves global data percentile clipping and z-score normalization using the global foreground mean, helping the model to generalize better during training. 
 ### Post-processing
-TO DO
+TO DO - refer to image?
 
 | Ground Truth | U-Net | U-Net+DR | nnU-Net+DR |
 |--------------|----------|----------|------------|
