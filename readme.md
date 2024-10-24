@@ -343,10 +343,16 @@ $HD95(G,P) = \text{percentile}{95} \left( \min{p \in P} || g - p || \right)$
 
 HD95 is used as a 3D metric for all models in our project. 
 
-### Results on validation set
+### Results on validation set 
+**Regular training**
 
 ![images/trainresults.png](images/trainresults.png)
 *Segmentation results for our best performing models, measured by the 3D DSC on a hidden validation set. The table shows results for the best epoch. Loss functions used are cross-entropy (ce), dice loss (dl), combined loss (dlce), and weighted cross-entropy (wce). For each organ, the **best** 3D DSC and <ins> best </ins> HD95 are marked.*
+
+**Training architectures inside the nnU-Net pipeline**
+
+![images/nnunetresulttable.png](images/nnunetresulttable.png)
+*nnU-Net based performance metrics, **d.s.** denotes "deep supervision"; absence implies no deep supervision. For each organ, the **best** 3D DSC and <ins> best </ins> HD95 are marked.*
 
 ## Submission and scoring [TO DO remove]
 Groups will have to submit:
