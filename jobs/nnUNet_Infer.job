@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=nnUNet_Infer
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=01:00:00
+#SBATCH --output=nnUNet_Infer_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2022.05
+
+cd ai4mi_project
+
+source ai4mi/bin/activate
+
+export nnUNet_raw="/home/scurXXXX/ai4mi_project/nnUNet/nnUNet_raw"
+export nnUNet_preprocessed="/home/scurXXXX/ai4mi_project/nnUNet/nnUNet_preprocessed"
+export nnUNet_results="/home/scurXXXX/ai4mi_project/nnUNet/nnUNet_results"
+
+#predictions on 2dshallow-UNet
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dshallow_test_pred' -d 1 -c 2dshallow --save_probabilities -f 1
+
+#predictions on 2dUNet
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dUNet_test_pred' -d 1 -c 2dUNet --save_probabilities -f 1
+
+#predictions on 2dUNet+DR
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dUNetDR_test_pred' -d 1 -c 2dUNetDR --save_probabilities -f 1
+
+#predictions on 2dUNet w ds
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2d_test_pred' -d 1 -c 2d --save_probabilities -f 1

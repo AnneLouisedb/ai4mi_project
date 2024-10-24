@@ -171,7 +171,22 @@ python plot_dice_nnUNet --file '/home/scurxxxx/ai4mi_project/nnUNet/nnUNet_resul
 #Results are stored in:
 /home/scurxxxx/ai4mi_project/nnUNet/nnUNet_results
 ```
-There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job
+##### Inference on Test Set
+Rename the test_set to the following format:
+![test_nnUnet](images/test_dir_nnUNet.png)
+
+Run this to generate the final predicitons
+```bash
+#predictions on 2dshallow-UNet
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dshallow_test_pred' -d 1 -c 2dshallow --save_probabilities -f 1
+#predictions on 2dUNet
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dUNet_test_pred' -d 1 -c 2dUNet --save_probabilities -f 1
+#predictions on 2dUNet+DR
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2dUNetDR_test_pred' -d 1 -c 2dUNetDR --save_probabilities -f 1
+#predictions on 2dUNet w ds
+nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2d_test_pred' -d 1 -c 2d --save_probabilities -f 1
+```
+There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job, nnUNet_infer.job
 
 ---------
 
@@ -268,7 +283,7 @@ The post-processing phase ensures the accuracy of the segmentation by enforcing 
 The nnU-Net framework, both in its 2D and 3D low/high-resolution forms, provides an automated pipeline for image segmentation. The low-resolution 3D nnU-Net captures broader contextual information by working with downsampled data, which helps in detecting large-scale structures. Meanwhile, the high-resolution 3D nnU-Net operates on finer-resolution data, allowing it to capture small details and precise boundaries. 
 
 ## Evaluation Metrics
-To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) and the 95\% Hausdorff Distance (HD95) both expressed in $mm$ and implemented in [evaluation.py](evaluation.py). 
+To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) and the 95\% Hausdorff Distance (HD95) expressed in $mm$ and implemented in [evaluation.py](evaluation.py). 
 
 ### Dice Similarity Coefficient (DSC)
 The Dice Similarity Coefficient (DSC) focuses on the overlap between predicted and ground truth segmentations. It provides a score between 0 and 1, with 1 indicating perfect overlap. 
