@@ -8,10 +8,12 @@ This project is based around the SegTHOR challenge data. The challenge ia based 
 
 ### Results on test set
 #### Initial training
-| Patient   | E-Net (Baseline) | 2D U-Net CE | 2D U-Net+DR | sU-Net |
+| Patient   | (1) E-Net (Baseline) | (2) U-Net | (3) U-Net+DR | (4) sU-Net |
 |-----------|------------------|----------|----------|-------|
 | Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
+
+*Segmentation for our best performing models, measured by the 3D DSC on a hidden validation set. The visualisations above show segmentation results on two patients in the test set. (1) E-net trained on ce (2) 2D U-Net trained on wce. (3)  U-Net+DR trained on ce (4) sU-Net trained on dlce. Loss functions used are cross-entropy (ce), dice loss (dl), combined loss (dlce), and weighted cross-entropy (wce).*
 
 #### Training architectures inside the nnU-Net pipeline
 
