@@ -7,46 +7,8 @@
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 [TO DO LO]
 
-<details>
-<summary>Click to expand environment setup </summary>
 
-### Setting up the environment
-```
-$ git clone https://github.com/HKervadec/ai4mi_project.git
-$ cd ai4mi_project
-$ git submodule init
-$ git submodule update
-```
-This codebase was written for python 3.10 or more recent. Please ensure the virtual environment is in the correct python version.
-```
-$ python -m venv ai4mi
-$ source ai4mi/bin/activate
-$ which python  # ensure this is not your system's python anymore
-$ python -m pip install -r requirements.txt
-```
 
-### Getting the data
-The synthetic dataset is generated randomly, whereas for Segthor it is required to put the file [`segthor_train.zip`](https://amsuni-my.sharepoint.com/:u:/g/personal/h_t_g_kervadec_uva_nl/EfMdFte7pExAnPwt4tYUcxcBbJJO8dqxJP9r-5pm9M_ARw?e=ZNdjee) (required a UvA account) in the `data/` folder. If the computer running it is powerful enough, the recipe for `data/SEGTHOR` can be modified in the [Makefile](Makefile) to enable multi-processing (`-p -1` option, see `python slice_segthor.py --help` or its code directly).
-```
-$ make data/TOY2
-$ make data/SEGTHOR
-```
-For windows users, you can use the following instead
-```
-$ rm -rf data/TOY2_tmp data/TOY2
-$ python gen_two_circles.py --dest data/TOY2_tmp -n 1000 100 -r 25 -wh 256 256
-$ mv data/TOY2_tmp data/TOY2
-
-$ sha256sum -c data/segthor_train.sha256
-$ unzip -q data/segthor_train.zip
-
-$ rm -rf data/SEGTHOR_tmp data/SEGTHOR
-$ python  slice_segthor.py --source_dir data/segthor_train --dest_dir data/SEGTHOR_tmp \
-         --shape 256 256 --retain 10
-$ mv data/SEGTHOR_tmp data/SEGTHOR
-````
-<details>
- 
 ### Results on test set
 
 | Patient   | E-Net (Baseline) | 2D U-Net CE | 2D U-Net+DR | sU-Net |
@@ -62,9 +24,29 @@ $ mv data/SEGTHOR_tmp data/SEGTHOR
 | Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
 
 
-## Dataset 
+## Setup
 [TO DO LO]
 
+<details>
+<summary>Click to expand environment setup </summary>
+
+### Setting up the environment
+This codebase was written for python 3.10 or more recent. Please ensure the virtual environment is in the correct python version.
+```
+$ git clone https://github.com/HKervadec/ai4mi_project.git
+$ cd ai4mi_project
+$ git submodule init
+$ git submodule update
+
+# virtual environment
+$ python -m venv ai4mi
+$ source ai4mi/bin/activate
+$ which python  # ensure this is not your system's python anymore
+$ python -m pip install -r requirements.txt
+```
+---------
+</details>
+ 
 ## Loss functions
 All loss functions are implemented in the [losses.py](losses.py) and can be chosen through the `--loss` argument when running the training process in [main.py](main.py). The file contains implementations of the `DiceLoss()` ,`CrossEntropy()`, `Weighted_CrossEntropy()`, and  `TverskyLoss()`. Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `DiceCE()`.
 
@@ -342,7 +324,30 @@ $HD95(G,P) = \text{percentile}{95} \left( \min{p \in P} || g - p || \right)$
 
 HD95 is used as a 3D metric for all models in our project. 
 
+<details>
+<summary>Click to expand data </summary>
 
+### Getting the data
+The synthetic dataset is generated randomly, whereas for Segthor it is required to put the file [`segthor_train.zip`](https://amsuni-my.sharepoint.com/:u:/g/personal/h_t_g_kervadec_uva_nl/EfMdFte7pExAnPwt4tYUcxcBbJJO8dqxJP9r-5pm9M_ARw?e=ZNdjee) (required a UvA account) in the `data/` folder. If the computer running it is powerful enough, the recipe for `data/SEGTHOR` can be modified in the [Makefile](Makefile) to enable multi-processing (`-p -1` option, see `python slice_segthor.py --help` or its code directly).
+```
+$ make data/TOY2
+$ make data/SEGTHOR
+```
+For windows users, you can use the following instead
+```
+$ rm -rf data/TOY2_tmp data/TOY2
+$ python gen_two_circles.py --dest data/TOY2_tmp -n 1000 100 -r 25 -wh 256 256
+$ mv data/TOY2_tmp data/TOY2
+
+$ sha256sum -c data/segthor_train.sha256
+$ unzip -q data/segthor_train.zip
+
+$ rm -rf data/SEGTHOR_tmp data/SEGTHOR
+$ python  slice_segthor.py --source_dir data/segthor_train --dest_dir data/SEGTHOR_tmp \
+         --shape 256 256 --retain 10
+$ mv data/SEGTHOR_tmp data/SEGTHOR
+````
+<details>
 
 ## Submission and scoring [TO DO remove]
 Groups will have to submit:
