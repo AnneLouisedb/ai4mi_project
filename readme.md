@@ -225,12 +225,12 @@ TO DO
 ### Post-processing
 TO DO
 
-| Ground Truth | U-Net CE | U-Net DR | nnU-Net DR |
+| Ground Truth | U-Net | U-Net+DR | nnU-Net+DR |
 |--------------|----------|----------|------------|
 | <img src="images/GT.jpeg" width="150" height="150" /> | <img src="images/unet_ce.jpeg" width="150" height="150" /> | <img src="images/unet+dr.jpeg" width="150" height="150" /> | <img src="images/nnunet+DR.jpeg" width="150" height="150" /> |
 
 In the figure above, the segmentation results for patient 16 across various models are being
-compared: Ground Truth, U-Net CE, U-Net+DR, and nnU-Net+DR. 
+compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR. 
 
 The nnU-Net segmentation showcases a significant improvement, due to its **incorporated pre- and post-processing steps**. 
 Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
