@@ -277,17 +277,15 @@ Training our architectures within the nnU-Net pipeline automates pre- and post-p
 ### Pre-processing
 In this implementation, based on the [dataset fingerprint](data2/dataset_fingerprint.json) images are resampled in-plane with third order spline, out of plane with nearest neighbour. Intensity normalization for CT images (CTNormalization scheme) involves global data percentile clipping and z-score normalization using the global foreground mean, helping the model to generalize better during training. 
 ### Post-processing
-TO DO - refer to image?
 
-| Ground Truth | U-Net | U-Net+DR | nnU-Net+DR |
+| Ground Truth | (1) U-Net | (2) U-Net+DR  | (3) nnU-Net+DR |
 |--------------|----------|----------|------------|
 | <img src="images/GT.jpeg" width="800" height="300" /> | <img src="images/unet_ce.jpeg" width="800" height="300" /> | <img src="images/unet+dr.jpeg" width="800" height="300" /> | <img src="images/nnunet+DR.jpeg" width="800" height="300" /> |
 
 *In the figure above, the segmentation results for patient 16 across various models are being
-compared: Ground Truth, U-Net (trained on cross entropy) , U-Net+DR, and nnU-Net+DR.*
+compared: Ground Truth, (1) U-Net (trained on cross entropy) , (2) U-Net+DR (trained on combined loss), (3) and U-Net+DR trained inside the nnU-net pipleine.*
 
-The nnU-Net segmentation showcases a significant improvement, due to its **incorporated pre- and post-processing steps**. 
-Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
+The nnU-Net segmentation (case 3) showcases a significant improvement compared to regular training (1) and (2), due to its **incorporated pre- and post-processing steps**. Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
