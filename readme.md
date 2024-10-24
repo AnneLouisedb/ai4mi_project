@@ -24,7 +24,7 @@ This project is based around the SegTHOR challenge data. The challenge ia based 
 
 *Segmentation for a variety of models trained in the nnU-Net pipeline. The visualisations above show segmentation results for two patients in the test set. With (1) an nnU-Net-configured U-Net trained with deep supervision, (2) a standard U-Net topology without
 dataset-specific configuration, and (3) our custom U-Net variant U-Net + DR, and (4) E-Net integrated into the nnU-Net training
-pipeline. 
+pipeline.*
 
 ## Setup
 
