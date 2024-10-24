@@ -228,6 +228,8 @@ O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Bi
 ![nnU-Net architecture](images/nn-Unet_architecture.png)
 
 F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
+
+
 ##### Segthor Dataset Fingerprint
 - (1)
 - (2)
@@ -283,7 +285,7 @@ The post-processing phase ensures the accuracy of the segmentation by enforcing 
 The nnU-Net framework, both in its 2D and 3D low/high-resolution forms, provides an automated pipeline for image segmentation. The low-resolution 3D nnU-Net captures broader contextual information by working with downsampled data, which helps in detecting large-scale structures. Meanwhile, the high-resolution 3D nnU-Net operates on finer-resolution data, allowing it to capture small details and precise boundaries. 
 
 ## Evaluation Metrics
-To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) and the 95\% Hausdorff Distance (HD95) expressed in $mm$ and implemented in [evaluation.py](evaluation.py). 
+To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) implemented in [main.py](main.py) and calculated after every epoch. And the 95\% Hausdorff Distance (HD95) expressed in $mm$, implemented in [evaluation.py](evaluation.py). 
 
 ### Dice Similarity Coefficient (DSC)
 The Dice Similarity Coefficient (DSC) focuses on the overlap between predicted and ground truth segmentations. It provides a score between 0 and 1, with 1 indicating perfect overlap. 
