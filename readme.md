@@ -347,6 +347,22 @@ $HD95(G,P) = \text{percentile}{95} \left( \min{p \in P} || g - p || \right)$
 
 HD95 is used as a 3D metric for all models in our project. 
 
+### Variations of HD95 among patients in the validation set
+#### E-net trained on ce (baseline)
+
+![images/trainresults.png](images/HD95enet.jpeg)
+
+#### U-Net trained on ce
+![images/trainresults.png](images/HD95unetce.jpeg)
+
+#### U-Net+DR trained on ce
+![images/train](images/HD95unetdr.jpeg)
+
+#### sU-Net trained on dlce
+![images/trainng](images/HD95sunet.jpeg)
+
+
+
 ### Results on validation set 
 **Regular training**
 
