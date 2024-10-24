@@ -46,6 +46,10 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 
 ```
 
+<details>
+<summary>Click to expand arguments table</summary>
+<div style="font-size: 0.8em; max-height: 500px; overflow-y: auto;">
+ 
 | Argument | Default | Choices | Description |
 |----------|---------|---------|-------------|
 | `--epochs` | 200 | - | Number of training epochs |
@@ -57,7 +61,7 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--num_workers` | 5 | - | Number of worker processes |
 | `--gpu` | False | - | Enable GPU usage (flag) |
 | `--debug` | False | - | Run in debug mode with reduced dataset (flag) |
-| `--model` | enet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
+| `--model` | ENet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
 | `--filter` | None | gaussian, median, non_local_means, bilateral, wavelet | Preprocessing filter |
 | `--loss` | CE | CE, Dice, DiceCE, tversky | Loss function |
 | `--random_crop_h` | 100 | - | Height for random crop |
@@ -65,6 +69,13 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--resume` | None | - | Path to model for resuming training |
 | `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
 | `--dropout_prob` | 0.2 | - | Dropout probability |
+
+
+</div>
+</details>
+
+
+
 
 ---------
 
