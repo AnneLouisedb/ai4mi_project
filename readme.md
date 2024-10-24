@@ -320,6 +320,12 @@ HD95 is used as a 3D metric for all models in our project.
 | Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
 
+| Patient   | nnstandardU-Net | nnU-Net |   nnDR | nnsU-Net | 
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
+
+
 ## TO DO
 
 [] how to run training description
