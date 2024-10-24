@@ -343,6 +343,10 @@ $HD95(G,P) = \text{percentile}{95} \left( \min{p \in P} || g - p || \right)$
 
 HD95 is used as a 3D metric for all models in our project. 
 
+### Results on validation set
+
+![images/trainresults.png](images/trainresults.png)
+*Segmentation results for our best performing models. For each organ, the **best** 3D DSC and <ins> best </ins> HD95 are marked.*
 
 ## Submission and scoring [TO DO remove]
 Groups will have to submit:
