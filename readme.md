@@ -7,37 +7,29 @@
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 [TO DO LO]
 
+### Results on test set
+
+| Patient   | E-Net (Baseline) | U-Net CE | U-Net DR | sUnet |
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
+
+### Results on test set trained into nnU-Net training pipeline 
+
+| Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
+
+
 ## Dataset 
 [TO DO LO]
 
 ## Loss functions
-All loss functions are implemented in the [losses.py](losses.py) and can be chosen through the `--loss` argument when running the training process in [main.py](main.py).
-
-### Dice Loss
-Dice Loss focuses on the overlap between the predicted and ground truth regions, 
-ensuring small regions of interest are not overwhelmed by the background class. 
-This is implemented as `DiceLoss()` in the project. 
-
-$L_{dsc}(y, \hat{y}) = 1 - \frac{2 \sum_n y_{nk} \hat{y}_{nk}}{\sum_n y_{nk} + \sum_n \hat{y}_{nk}}$
-
-### (Weighted) Cross Entropy
-Cross Entropy Loss is widely used for pixel-wise classification tasks. In the project, it is implemented as `CrossEntropy()` and its weighted version as `Weighted_CrossEntropy()`, where class weights are adjusted to handle class imbalances. The standard Cross Entropy loss is calculated as:
-
-$L_{CE}(y, \hat{y}) = -\frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{C} w_c * y_{i,c} \log(\hat{y}_{i,c})$
-
-In the weighted version, the weights \( w_c \) are inversely proportional to the class frequencies.
-
-### Tversky Loss 
-Tversky Loss is used to provide a flexible balance between false positives and false negatives. It is implemented as `TverskyLoss()` and allows control over the trade-off using parameters $\alpha$ and $\beta$:
-
-$$L_{tl}(y,\hat{y}) = 1 - \frac{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} }{ \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} + \alpha \sum_{k=1}^{N} y_{nk}\hat{y}_{nk} + \beta \sum_{k=1}^{N} y_{nk}\hat{y}_{nk}}$$
-
-This allows for adjusting the weight of false positives (FP) and false negatives (FN), which is crucial in medical segmentation tasks where some types of errors are more critical than others.
-
-### Combined Loss
-Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `"DiceCE"`. 
+All loss functions are implemented in the [losses.py](losses.py) and can be chosen through the `--loss` argument when running the training process in [main.py](main.py). The file contains implementations of the `DiceLoss()` ,`CrossEntropy()`, `Weighted_CrossEntropy()`, and  `TverskyLoss()`. Our combined loss adds the Dice Loss and Cross Entropy Loss, and is implemented as `DiceCE()`.
 
 $L_{dlce} = L_{dsc} + L_{ce}$
+
 
 ## Model Training
 ### Regular Training
@@ -307,19 +299,6 @@ HD95 is used as a 3D metric for all models in our project.
 
 ## Results
 
-### Results on test set
-
-| Patient   | E-Net (Baseline) | U-Net CE | U-Net DR | sUnet |
-|-----------|------------------|----------|----------|-------|
-| Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
-| Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
-
-### Results on test set trained into nnU-Net training pipeline 
-
-| Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
-|-----------|------------------|----------|----------|-------|
-| Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
-| Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
 
 
 ## TO DO
