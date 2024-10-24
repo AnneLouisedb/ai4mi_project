@@ -155,6 +155,9 @@ nnUNetv2_train 1 2dshallowdropout 1 --dropout_prob 0.2
 # 2D UNet with dilated bottleneck
 nnUNetv2_train 1 2dUNetDR 1 --dropout_prob 0.0
 
+# 2D ENet
+nnUNetv2_train 1 2dENet 1 
+
 # 3D full resolution version
 nnUNetv2_train 1 3d_fullres 1
 
@@ -186,7 +189,7 @@ nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet'
 #predictions on 2dUNet w ds
 nnUNetv2_predict -i '/home/scurXXXX/ai4mi_project/data/segthor_test/test_nnUNet' -o '/home/scurXXXX/ai4mi_project/nnUNet_2d_test_pred' -d 1 -c 2d --save_probabilities -f 1
 ```
-There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job, nnUNet_infer.job
+There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job, nnUNet_Infer.job
 
 ---------
 

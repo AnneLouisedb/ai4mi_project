@@ -38,6 +38,9 @@ nnUNetv2_train 1 2dshallowdropout 1 --dropout_prob 0.2
 # 2D UNet with dilated bottleneck
 nnUNetv2_train 1 2dUNetDR 1 --dropout_prob 0.0
 
+# 2D ENet
+nnUNetv2_train 1 2dENet 1 
+
 # 3D full resolution version
 nnUNetv2_train 1 3d_fullres 1
 
