@@ -218,6 +218,17 @@ We crop random sections of the image during training, forcing the model to learn
 ### Rescaling
 Rescaling is done to normalize the pixel values, which can enhance the model's learning process and reduce noise. The pixel values were initially in the range 0-256 (Intensity levels in grayscale) and were rescaled to a smaller range, 0-4. 
 
+## Autoamted Pre and Post Processing of nnU-Net
+Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
+
+### Pre-processing
+TO DO 
+### Post-processing
+TO DO
+
+
+
+
 # Model Architectures
 ### E-Net
 ![E-Net](images/ENet-architecture.png)
@@ -277,17 +288,7 @@ Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconn
 By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
 ensuring higher quality in the segmentation output.
 
-## Pre and Post Processing of nnU-Net
 
-Training our architectures within the nnU-Net pipeline automates pre- and post-processing steps, reducing manual intervention and increasing model robustness. 
-
-### Pre-processing
-The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
-
-### Post-processing
-The post-processing phase ensures the accuracy of the segmentation by enforcing single connected components, helping remove small artifacts.  The process involves automated evaluation of connected components and removal of small structures that do not meet certain size criteria, reducing noise and improving segmentation accuracy. Additionally, the decoder effectively integrates higher-resolution feature maps to enhance segmentation precision. 
-
-The nnU-Net framework, both in its 2D and 3D low/high-resolution forms, provides an automated pipeline for image segmentation. The low-resolution 3D nnU-Net captures broader contextual information by working with downsampled data, which helps in detecting large-scale structures. Meanwhile, the high-resolution 3D nnU-Net operates on finer-resolution data, allowing it to capture small details and precise boundaries. 
 
 ## Evaluation Metrics
 To assess the performance of our organ segmentation models, we employ two primary metrics for each OAR: the Dice Similarity Coefficient (DSC) implemented in [main.py](main.py) and calculated after every epoch. And the 95\% Hausdorff Distance (HD95) expressed in $mm$, implemented in [evaluation.py](evaluation.py). 
