@@ -280,7 +280,7 @@ In this implementation, based on the [dataset fingerprint](data2/dataset_fingerp
 
 | Ground Truth | (1) U-Net | (2) U-Net+DR  | (3) nnU-Net+DR |
 |--------------|----------|----------|------------|
-| <img src="images/GT.jpeg" width="800" height="300" /> | <img src="images/unet_ce.jpeg" width="800" height="300" /> | <img src="images/unet+dr.jpeg" width="800" height="300" /> | <img src="images/nnunet+DR.jpeg" width="800" height="300" /> |
+| <img src="images/GT.jpeg" width="150" height="150" /> | <img src="images/unet_ce.jpeg" width="150" height="150" /> | <img src="images/unet+dr.jpeg" width="150" height="150" /> | <img src="images/nnunet+DR.jpeg" width="150" height="150" /> |
 
 *In the figure above, the segmentation results for patient 16 across various models are being
 compared: Ground Truth, (1) U-Net (trained on cross entropy) , (2) U-Net+DR (trained on combined loss), (3) and U-Net+DR trained inside the nnU-net pipleine.*
