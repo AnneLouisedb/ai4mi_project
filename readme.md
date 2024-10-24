@@ -68,7 +68,7 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--random_crop_w` | 100 | - | Width for random crop |
 | `--resume` | None | - | Path to model for resuming training |
 | `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
-| `--dropout_prob` | 0.2 | - | Dropout probability |
+| `--dropout_prob` | 0.0 | - | Dropout probability |
 
 
 </div>
