@@ -225,6 +225,19 @@ TO DO
 ### Post-processing
 TO DO
 
+| Ground Truth | U-Net CE | U-Net DR | nnU-Net DR |
+|--------------|----------|----------|------------|
+| <img src="images/GT.jpeg" width="150" height="150" /> | <img src="images/unet_ce.jpeg" width="150" height="150" /> | <img src="images/unet+dr.jpeg" width="150" height="150" /> | <img src="images/nnunet+DR.jpeg" width="150" height="150" /> |
+
+In the figure above, the segmentation results for patient 16 across various models are being
+compared: Ground Truth, U-Net CE, U-Net+DR, and nnU-Net+DR. 
+
+The nnU-Net segmentation showcases a significant improvement, due to its **incorporated pre- and post-processing steps**. 
+Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
+By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
+ensuring higher quality in the segmentation output.
+
+
 
 
 
@@ -272,20 +285,6 @@ feature extraction. The network ends with a softmax layer.
 ![U-Net architecture](images/VNet_architecture.png)
 
 D. Rastogi, P. Johri, and V. Tiwari, "Brain Tumor Segmentation and Tumor Prediction Using 2D-VNet Deep Learning Architecture," in *2021 10th International Conference on System Modeling & Advancement in Research Trends (SMART)*, pp. 723-732, 2021. [doi:10.1109/SMART52563.2021.9676317](https://doi.org/10.1109/SMART52563.2021.9676317).
-
-
-## Visuals - patient 16
-| Ground Truth | U-Net CE | U-Net DR | nnU-Net DR |
-|--------------|----------|----------|------------|
-| <img src="images/GT.jpeg" width="150" height="150" /> | <img src="images/unet_ce.jpeg" width="150" height="150" /> | <img src="images/unet+dr.jpeg" width="150" height="150" /> | <img src="images/nnunet+DR.jpeg" width="150" height="150" /> |
-
-In the figure above, the segmentation results for patient 16 across various models are being
-compared: Ground Truth, U-Net CE, U-Net DR, and nnU-Net DR. 
-
-The nnU-Net segmentation showcases a significant improvement, due to its incorporated pre- and post-processing steps. 
-Unlike the U-Net variants, the nnU-Net result demonstrates that smaller, disconnected segments are correctly removed. 
-By eliminating these small, incorrect fragments, nnU-Net provides a cleaner, more realistic representation of the organs, 
-ensuring higher quality in the segmentation output.
 
 
 
