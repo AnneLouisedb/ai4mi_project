@@ -313,7 +313,7 @@ HD95 is used as a 3D metric for all models in our project.
 
 ### Results on test set trained into nnU-Net training pipeline 
 
-| Patient   | | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
+| Patient   | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
 |-----------|------------------|----------|----------|-------|
 | Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
 | Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
