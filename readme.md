@@ -271,7 +271,7 @@ Training our architectures within the nnU-Net pipeline automates pre- and post-p
 ##### Segthor Dataset Fingerprint
 - (1) Distribution of spacings: standardize to $0.976 \times 0.976 \times 2.5 mm^3$
 - (2) Median image size 512 x 512 voxels  
-- (3) Intensity distribution: Pixel values are in teh range of 0-256 (greyscale)
+- (3) Intensity distribution: Pixel values are in the range of 0-256 (greyscale)
 - (4) Image modality: CT 
 
 ### Pre-processing
