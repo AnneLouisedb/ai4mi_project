@@ -7,36 +7,8 @@
 The project is based around the SegTHOR challenge data, which was kindly allowed by Caroline Petitjean (challenge organizer) to use for the course. The challenge was originally on the segmentation of different organs: heart, aorta, esophagus and trachea.
 [TO DO LO]
 
-
-### Results on test set
-
-| Patient   | E-Net (Baseline) | U-Net CE | U-Net DR | sUnet |
-|-----------|------------------|----------|----------|-------|
-| Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
-| Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
-
-
-| Patient   | nnstandardU-Net | nnU-Net |   nnDR | nnsU-Net | 
-|-----------|------------------|----------|----------|-------|
-| Patient 41 | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
-| Patient 42 | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
-
-
-
-
-
-
-
-
-
 ## Dataset 
 [TO DO LO]
-
-##### Segthor Dataset Fingerprint
-- (1) Distribution of spacings
-- (2) Median shape
-- (3) Intensity distribution
-- (4) Image modality 
 
 ## Loss functions
 All loss functions are implemented in the [losses.py](losses.py) and can be chosen through the `--loss` argument when running the training process in [main.py](main.py).
@@ -74,10 +46,6 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 
 ```
 
-<details>
-<summary>Click to expand arguments table</summary>
-<div style="font-size: 0.8em; max-height: 500px; overflow-y: auto;">
- 
 | Argument | Default | Choices | Description |
 |----------|---------|---------|-------------|
 | `--epochs` | 200 | - | Number of training epochs |
@@ -89,21 +57,14 @@ $ python main.py --dataset SEGTHOR --mode full --epochs 50 --dest results/segtho
 | `--num_workers` | 5 | - | Number of worker processes |
 | `--gpu` | False | - | Enable GPU usage (flag) |
 | `--debug` | False | - | Run in debug mode with reduced dataset (flag) |
-| `--model` | ENet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
+| `--model` | enet |ENet, UNet, VNet, SUNet, UNetDR| Model architecture to use |
 | `--filter` | None | gaussian, median, non_local_means, bilateral, wavelet | Preprocessing filter |
 | `--loss` | CE | CE, Dice, DiceCE, tversky | Loss function |
 | `--random_crop_h` | 100 | - | Height for random crop |
 | `--random_crop_w` | 100 | - | Width for random crop |
 | `--resume` | None | - | Path to model for resuming training |
 | `--best_dice` | 0 | - | Best dice value of old model (for resuming) |
-| `--dropout_prob` | 0.0 | - | Dropout probability |
-
-
-</div>
-</details>
-
-
-
+| `--dropout_prob` | 0.2 | - | Dropout probability |
 
 ---------
 
@@ -269,6 +230,12 @@ O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional Networks for Bi
 F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, and K. H. Maier-Hein, "nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation," *Nature Methods*, vol. 18, no. 2, pp. 203–211, 2021. [Nature Publishing Group](https://www.nature.com/articles/s41592-020-01008-z).
 
 
+##### Segthor Dataset Fingerprint
+- (1)
+- (2)
+- (3)
+- (4) Image modality 
+
 ### sU-Net
 ![sU-Net architecture](images/sU-Net.png)
 
@@ -337,13 +304,19 @@ HD95 is used as a 3D metric for all models in our project.
 
 ## Results
 
-### Results on internal validation set (DSC)
+### Results on test set
 
+| Patient   | E-Net (Baseline) | U-Net CE | U-Net DR | sUnet |
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/enet_41.gif" width="150" height="150" /> | <img src="images/unet_41.gif" width="150" height="150" /> | <img src="images/unetdr_41.gif" width="150" height="150" /> | <img src="images/sunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/enet_42.gif" width="150" height="150" /> | <img src="images/unet_42.gif" width="150" height="150" /> | <img src="images/unetdr_42.gif" width="150" height="150" /> | <img src="images/sunet_42.gif" width="150" height="150" /> |
 
+### Results on test set trained into nnU-Net training pipeline 
 
-### Results for Best performing models
-
-### nnU-Net based performance metrics
+| Patient   | | 2D U-Net d.s. | 2D U-Net |  U-Net + DR | E-Net | 
+|-----------|------------------|----------|----------|-------|
+| Patient 41 | <img src="images/nnunet_41.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" /> | <img src="images/nndr_41.gif" width="150" height="150" /> | <img src="images/nnsunet_41.gif" width="150" height="150" /> |
+| Patient 42 | <img src="images/nnunet_42.gif" width="150" height="150" /> | <img src="images/nnstandardunet_41.gif" width="150" height="150" />  | <img src="images/nndr_42.gif" width="150" height="150" /> | <img src="images/nnsunet_42.gif" width="150" height="150" /> |
 
 
 ## TO DO
