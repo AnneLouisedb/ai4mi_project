@@ -241,7 +241,7 @@ There are job files available for the same : nnUNet_Setup.job, nnUNet_Run.job, n
 The preprocessing steps include resampling and intensity normalization, ensuring that the input data is consistently formatted across datasets. Data augmentation techniques such as random cropping are done on the fly during training.
 
 ### Heart label transformation
-We use the following affine matrix derived with the SimpleITK library. We use a center-of-mass alignment and rotation to ensure proper alignment of the heart labels. The detailed implementation can be found in [transform.ipynb](transform.ipynb)  
+We use the following affine matrix derived with the SimpleITK library. We use a center-of-mass alignment and rotation to ensure proper alignment of the heart labels. The detailed implementation can be found in [transform.ipynb](heart_transform/transform.ipynb)  
 ```
 [[1.         0.         0.         0.41042964]
  [0.         1.         0.         0.1911134 ]
